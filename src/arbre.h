@@ -8,11 +8,11 @@
 #include <string.h>
 
 
-bool etatContinue(struct dirent* entree);
+bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
 
 void parcourirDossier( char* chemin);
 
-void getChemin(char* cheminAvant, char* objCourant,char* enregistre);
+void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin sera enregistré dans le paramettre enregistre
 
 
 

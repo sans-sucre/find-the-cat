@@ -4,10 +4,11 @@
 bool etatContinue(struct dirent* entree){
     //printf("type: %d\n",entree->d_type);
     if(entree->d_type==DT_DIR){
-        if(strchr(entree->d_name,'.')==NULL){//on prend pas en compte les dossiers cachés, le dossier courant ou le dossier précedédent
-            return true;
+        //printf("occurence 0 : %c\n",entree->d_name[0]);
+        if(strcmp(entree->d_name,".")==0 || strcmp(entree->d_name,"..")==0||(entree->d_name)[0]=='.'){//on prend pas en compte le dossier courant ou le dossier précedédent
+            return false;
         }
-        return false;
+        return true;
         
     }
     else{
@@ -53,6 +54,10 @@ void parcourirDossier(char* chemin){
             char* nom=courant->d_name;
             getChemin(chemin,nom,cheminP);
             printf("chemin : %s\n",cheminP);
+            if (courant->d_name[0]=='.'){
+                printf("occurence 0 : %c\n",courant->d_name[0]);
+            }
+            
             parcourirDossier(cheminP);
         }    
     } 
