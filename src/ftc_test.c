@@ -26,7 +26,7 @@ int main(int argc, char const *argv[]){
         if (strcmp(commande,commandes[i])){
             for (int j = 0 ; j < options[i].length ; j++){ //nb d'options de la commande
                 if (strcmp())
-            }
+            }//pour chaque option donnée dans la ligne de commande faut qu'il fasse ça...
         }
     }
 
