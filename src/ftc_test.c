@@ -4,30 +4,38 @@
 //fonctions qui correspondent aux commandes (bien si c'est du même nom)
 
 void test(){
+    printf("Fonction test\n");
     return;
 }
 void name(char* parametre){
+    printf("Fonction name\n");
     return;
 }
 void size(char* parametre){
+    printf("Fonction size\n");
     return;
 }
 void date(char* parametre){
+    printf("Fonction date\n");
     return;
 }
 void mime(char* parametre){
+    printf("Fonction mime\n");
     return;
 }
 void ctc(char* parametre){
+    printf("Fonction ctc\n");
     return;
 }
 void dir(char* parametre){
+    printf("Fonction dir\n");
     return;
 }
 
 void commande_a_exec(char* commande,char* parametre){
     char* commandes[]={'-test','-name','-size','-date','-mime','-ctc','-dir'};
 
+    //la taille du tableau peut changer donc on la met dans une variable plutôt qu'en dur 
     long int taille = sizeof(commandes)/sizeof(commandes[0]);
 
     int commande_exec;
@@ -35,8 +43,8 @@ void commande_a_exec(char* commande,char* parametre){
     printf("Size tableau : %ld\n", taille);
 
     for (int i = 0 ; i < taille ; i++){
-        if (strcmp(commande,commandes[i])){
-            commande_exec = i;
+        if (strcmp(commande,commandes[i])){ //on trouve l'indice de la commande qui correspond à la commande demandée
+            commande_exec = i;  //on le sauvegarde pour le switch
         }
     }
 
@@ -97,7 +105,8 @@ int main(int argc, char const *argv[]){
     char* parametre = argv[3]; //paramètre de la commande
     //printf("Paramètre : %s\n",parametre);
     
-    commande_a_exec(commande,parametre);
+    commande_a_exec(commande,parametre);    //on exécute la command demandée avec le parametre donné
+    //si le paramètre n'est pas correct, ce sera dans la fonction qu'il sera analysé et jugé mauvais
 
     parcourirDossier(chemin);
 
