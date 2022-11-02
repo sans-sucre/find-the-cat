@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include"arbre.h"
+#include <stdio.h>
+#include "arbre.h"
 
 int main(int argc, char const *argv[])
 {

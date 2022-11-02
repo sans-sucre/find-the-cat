@@ -5,7 +5,7 @@ bool etatContinue(struct dirent* entree){
     //printf("type: %d\n",entree->d_type);
     if(entree->d_type==DT_DIR){
         //printf("occurence 0 : %c\n",entree->d_name[0]);
-        if(strcmp(entree->d_name,".")==0 || strcmp(entree->d_name,"..")==0||(entree->d_name)[0]=='.'){//on prend pas en compte le dossier courant ou le dossier précedédent
+        if(strcmp(entree->d_name,".")==0 || strcmp(entree->d_name,"..")==0||(entree->d_name)[0]=='.'){//on prend pas en compte le dossier courant ou le dossier précédent
             return false;
         }
         return true;

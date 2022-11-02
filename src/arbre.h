@@ -1,11 +1,23 @@
 #ifndef __ARBRE__
-#define __ARBRE__
+#define __ARBRE__   //sert à quoi ?
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdbool.h>
 #include <string.h>
+
+typedef struct fichier{	// feuille
+    char* nom;
+    int taille;
+    __TIME__ last_access;
+}
+
+typedef struct dossier{	// = noeud
+	char* nom;
+    struct dossier** liste_dossiers;
+    struct fichier** liste_fichiers;
+}noeud;
 
 
 bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
