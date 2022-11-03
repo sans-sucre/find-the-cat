@@ -15,6 +15,43 @@ bool etatContinue(struct dirent* entree){
         return false;
     }
 }
+
+bool estFichier(struct dirent* entree){
+    if(entree->d_type==DT_REG){
+        
+        if((entree->d_name)[0]=='.'){//on prend pas en compte le dossier courant ou le dossier précédent
+            return false;
+        }
+        return true;
+        
+    }
+    return false;
+}
+
+int sizeToNumber(char* parametre){
+    int number=abs(atoi(parametre));
+
+    switch (parametre[strlen(parametre)-1])
+    {
+    case 'c':
+        break;
+    case 'k':
+        number=number*1024;
+        break;
+    case 'm':
+        number=number*1024*1024;
+        break;
+    case 'G':
+        number=number*1024*1024*1024;
+        break;
+    default:
+        perror("parametre error");
+        break;
+    }
+    return number;
+}
+
+
 void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette fonction sert à concaténer les chemins
     
     int tailleA=strlen(cheminAncien);
@@ -116,10 +153,54 @@ void name(char* parametre){
     }
     
 }
-void size(char* parametre){
-    printf("Fonction size\n");
-    return;
+void size(char* parametre,char* chemin){
+
+    struct stat sb;
+    DIR* entree = opendir(chemin);
+    struct dirent* courant = NULL;
+    char cheminP[200];
+    
+    while ((courant = readdir(entree))!= NULL)
+    {    
+        char* nom = courant->d_name; 
+        getChemin(chemin,nom,cheminP);
+
+        if (estFichier(courant)) // est un fichier
+        {
+            if (stat(cheminP,&sb)==-1)
+            {
+                perror("stat ERREUR");
+                exit(EXIT_FAILURE);
+            } 
+            if(parametre[0]=='+'){
+                if ((long long)sb.st_size > sizeToNumber(parametre))
+                {
+                    printf("chemin : %s taille de fichier : %lu octets\n",cheminP,sb.st_size);
+                }    
+            }
+            else if(parametre[0]=='-')
+            {
+                if ((long long)sb.st_size < sizeToNumber(parametre))
+                {
+                    printf("chemin : %s taille de fichier : %lu octets\n",cheminP,sb.st_size);
+                }    
+            }
+            else
+            {
+                perror("paramètre erreur, caractère dehors '+''-'\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+        if (etatContinue(courant)){ 
+            
+            size(parametre,cheminP);
+        }    
+    }
+    closedir(entree);
+    
 }
+
+
 void date(char* parametre){
     printf("Fonction date\n");
     return;
@@ -164,7 +245,7 @@ void commande_a_exec(char* commande,char* parametre){
         break;
 
     case 2:
-        size(parametre);
+        size(parametre,"");// à modifier
         break;
 
     case 3:

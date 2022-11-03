@@ -5,7 +5,7 @@
 int main(int argc, char const *argv[]){
     printf("Hello world!\n");
     char* chemin=".";//la racine de dossier, donné par question1
-
+/*
     char* parametres[7]; //mettre les options de chaque commande à l'indice i qui correspond bien à la commande i dans la liste commandes
     //plutôt faire une dictionnaire => pas de structure dictionnaire mais table de hashage... avec à chaque alvéole la liste simplement chaînée des options
     //on utilise commande pour trouver les options dans le dico, si la commande != clé du dico, commande pas reconnue
@@ -27,6 +27,7 @@ int main(int argc, char const *argv[]){
     parcourirDossier(chemin);
 
     commande_a_exec(commande,parametre);
-
+*/
+    size("+7c",chemin);
     return 0;
 }
