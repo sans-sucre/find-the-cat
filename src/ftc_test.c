@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]){
     char* parametre = argv[3]; //paramètre de la commande
     //printf("Paramètre : %s\n",parametre);
     
-    commande_a_exec(commande,parametre);    //on exécute la command demandée avec le parametre donné
+    //commande_a_exec(commande,parametre);    //on exécute la command demandée avec le parametre donné
     //si le paramètre n'est pas correct, ce sera dans la fonction qu'il sera analysé et jugé mauvais
 
     parcourirDossier(chemin);

@@ -39,28 +39,31 @@ void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette f
 
 void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
     //initialisation, on ouvre le dossier en fonction de chemin donné
-    DIR* entree=opendir(chemin);
-    struct dirent* courant=NULL;//structure après readdir
+    DIR* entree = opendir(chemin);
+    struct dirent* courant = NULL;//structure après readdir
 
     char cheminP[200];//seule façon à enregistrer le prochain chemin
     //printf("chemin courant : %s\n",chemin);
     
-    while ((courant=readdir(entree))!= NULL)
-    {
-        
+    while ((courant = readdir(entree))!= NULL)
+    {    
+        char* nom = courant->d_name; //nom du fichier ou dossier
+
         //printf("name is : %s, coutinue ? : %d\n",courant->d_name,etatContinue(courant));
-        if (etatContinue(courant))
-        {
-            char* nom=courant->d_name;
+        if(strcmp(nom,".")!=0 & strcmp(nom,"..")!=0 & nom[0]!='.'){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
+
             getChemin(chemin,nom,cheminP);
-            printf("chemin : %s\n",cheminP);
-            if (courant->d_name[0]=='.'){
+            printf("chemin : %s\n",cheminP); //on print le chemin du dossier ou fichier
+            
+            if (nom[0]=='.'){   //ici pas possible comme j'ai fait, ça sert à quoi ?
                 printf("occurence 0 : %c\n",courant->d_name[0]);
             }
-            
-            parcourirDossier(cheminP);
-        }    
-    } 
+
+            if (etatContinue(courant)){ //si c'est un dossier
+                parcourirDossier(cheminP);
+            }    
+        } 
+    }
     closedir(entree);
 }
 
