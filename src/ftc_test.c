@@ -13,18 +13,20 @@ int main(int argc, char const *argv[]){
     //ou sinon on met dans paramètres que les options qui sont uniques ou dénombrables, genre d m y pour dates mais pas chaque nb et + ou -
 
     char* starting_point = argv[1]; // d'où on commence la recherche
-    //printf("Départ : %s\n",starting_point);
+    printf("Départ : %s\n",starting_point);
 
     char* commande = argv[2];   
-    //printf("Commande : %s\n",commande);
+    printf("Commande : %s\n",commande);
 
     char* parametre = argv[3]; //paramètre de la commande
-    //printf("Paramètre : %s\n",parametre);
+    printf("Paramètre : %s\n",parametre);
     
     //commande_a_exec(commande,parametre);    //on exécute la command demandée avec le parametre donné
     //si le paramètre n'est pas correct, ce sera dans la fonction qu'il sera analysé et jugé mauvais
 
     parcourirDossier(chemin);
+
+    commande_a_exec(commande,parametre);
 
     return 0;
 }
