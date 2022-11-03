@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <sys/stat.h>
-
+#include<time.h>
 
 bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
 
@@ -29,7 +29,11 @@ char** parser(int nb_files_dir);
 
 void size(char* parametre,char* chemin);
 
-void date(char* parametre);
+bool stateSize(char* parametre, char* chemin);
+
+void date(char* parametre,char* chemin);
+
+bool stateDate(char* parametre,char* chemin);
 
 void mime(char* parametre);
 

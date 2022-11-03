@@ -155,7 +155,6 @@ void name(char* parametre){
 }
 void size(char* parametre,char* chemin){
 
-    struct stat sb;
     DIR* entree = opendir(chemin);
     struct dirent* courant = NULL;
     char cheminP[200];
@@ -167,28 +166,8 @@ void size(char* parametre,char* chemin){
 
         if (estFichier(courant)) // est un fichier
         {
-            if (stat(cheminP,&sb)==-1)
-            {
-                perror("stat ERREUR");
-                exit(EXIT_FAILURE);
-            } 
-            if(parametre[0]=='+'){
-                if ((long long)sb.st_size > sizeToNumber(parametre))
-                {
-                    printf("chemin : %s taille de fichier : %lu octets\n",cheminP,sb.st_size);
-                }    
-            }
-            else if(parametre[0]=='-')
-            {
-                if ((long long)sb.st_size < sizeToNumber(parametre))
-                {
-                    printf("chemin : %s taille de fichier : %lu octets\n",cheminP,sb.st_size);
-                }    
-            }
-            else
-            {
-                perror("paramètre erreur, caractère dehors '+''-'\n");
-                exit(EXIT_FAILURE);
+            if(stateSize(parametre,cheminP)){
+                //printf("chemin : %s \n",cheminP);
             }
         }
         if (etatContinue(courant)){ 
@@ -200,10 +179,98 @@ void size(char* parametre,char* chemin){
     
 }
 
+bool stateSize(char* parametre, char* chemin){
+    struct stat sb;
+    if (stat(chemin,&sb)==-1){
+        perror("stat ERREUR");
+        exit(EXIT_FAILURE);
+    } 
 
-void date(char* parametre){
-    printf("Fonction date\n");
-    return;
+    if(parametre[0]=='+'){
+        if ((long long)sb.st_size > sizeToNumber(parametre))
+        {
+            printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
+            return true;
+        }    
+    }
+    else if(parametre[0]=='-')
+    {
+        if ((long long)sb.st_size < sizeToNumber(parametre))
+        {
+            //printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
+            return true;
+        }    
+    }
+    else
+    {
+        perror("paramètre erreur, caractère dehors '+''-'\n");
+        exit(EXIT_FAILURE);
+    }
+    return false;
+}
+
+bool stateDate(char* parametre,char* chemin){
+    struct stat sb;
+    time_t now=time(NULL);
+    struct tm tm_now = *localtime (&now);
+    
+
+    if (stat(chemin,&sb)==-1){
+        perror("stat ERREUR");
+        exit(EXIT_FAILURE);
+    } 
+    if (parametre[0]=='+') // + 3h ==>plus que trois heures
+    {
+        
+        printf("Current Date/Time = %s", ctime(&now));
+        time_t temps=&sb.st_atime;
+        double diff_time=difftime(now,temps);
+        printf("%d\n",diff_time);
+        char* tim_str=ctime(&sb.st_atime);
+
+        printf("chemin : %s dernier accès : %s octets\n",chemin,tim_str);
+        return true;
+    }
+    else if (parametre[0]=='-') //-3h ==>moins que trois heures
+    {
+        /* code */
+    }
+    else
+    {
+        perror("paramètre erreur, caractère dehors '+''-'\n");
+        exit(EXIT_FAILURE);
+    }
+    return false;
+}
+
+
+void date(char* parametre,char* chemin){
+    
+    DIR* entree = opendir(chemin);
+    struct dirent* courant = NULL;
+    char cheminP[200];
+    
+    while ((courant = readdir(entree))!= NULL)
+    {    
+        char* nom = courant->d_name; 
+        getChemin(chemin,nom,cheminP);
+        printf("chemin : %s \n",cheminP);
+
+        if (estFichier(courant)) // est un fichier
+        {
+
+            if(stateDate(parametre,cheminP)){
+                printf("ok ici\n");
+            }
+            
+        }
+        if (etatContinue(courant)){ 
+            
+            date(parametre,cheminP);
+        }    
+    }
+    closedir(entree);
+    
 }
 void mime(char* parametre){
     printf("Fonction mime\n");
@@ -249,7 +316,7 @@ void commande_a_exec(char* commande,char* parametre){
         break;
 
     case 3:
-        date(parametre);
+        date(parametre,"");// à modifier
         break;
 
     case 4:
