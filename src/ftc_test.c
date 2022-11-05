@@ -28,8 +28,8 @@ int main(int argc, char const *argv[]){
 
     commande_a_exec(commande,parametre);
 */
-    date("-1h",chemin);
-    
+    //date("-1h",chemin);
+    check_regex("a*","arbr.h");
 
     return 0;
 }

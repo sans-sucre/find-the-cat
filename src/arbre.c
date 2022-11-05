@@ -369,3 +369,31 @@ void commande_a_exec(char* commande,char* parametre){
         break;
     }
 }
+
+bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui passer un const char
+    regex_t preg;
+    
+    int err = regcomp (&preg, parametre, REG_NOSUB | REG_EXTENDED);//on compile la chaîne de caractères 
+    if (err == 0)//pas d'erreur
+    {
+        int match = regexec (&preg,nom, 0, NULL, 0);
+        regfree (&preg);
+
+        if (match == 0)
+        {
+            printf ("%s est un fichier valide\n", nom);
+            return true;
+        }
+        else if (match == REG_NOMATCH)
+        {
+            printf ("%s n\'est pas un fichier valide\n", nom);
+            return false;
+        }
+    }
+    else
+    {
+        perror("erreur de compilation de regex\n");
+        exit(EXIT_FAILURE);
+    }
+    
+}

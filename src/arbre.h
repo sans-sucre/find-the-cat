@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include<time.h>
 #include <unistd.h>
+#include <regex.h>
 
 bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
 
@@ -44,7 +45,7 @@ void ctc(char* parametre);
 
 void dir(char* parametre);
 
-
+bool check_regex(char* parametre, char* nom);
 
 
 
