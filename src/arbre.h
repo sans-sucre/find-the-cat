@@ -8,12 +8,15 @@
 #include <string.h>
 #include <sys/stat.h>
 #include<time.h>
+#include <unistd.h>
 
 bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
 
 bool estFichier(struct dirent* entree);
 
 int sizeToNumber(char* parametre);//transformer un paramètre en un nombre
+
+int timeToNumber(char* parametre);//transformer un paramètre de temps en un nombre
 
 int parcourirDossier(char* chemin);
 

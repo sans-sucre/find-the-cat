@@ -28,7 +28,8 @@ int main(int argc, char const *argv[]){
 
     commande_a_exec(commande,parametre);
 */
-    //date("+7h",chemin);
-    stateDate("+3h","./src/arbre.h");
+    date("-1h",chemin);
+    
+
     return 0;
 }

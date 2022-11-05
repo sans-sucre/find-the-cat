@@ -51,6 +51,27 @@ int sizeToNumber(char* parametre){
     return number;
 }
 
+int timeToNumber(char* parametre){
+    int number=abs(atoi(parametre));
+
+    switch (parametre[strlen(parametre)-1])
+    {
+    case 'm':
+        number=number*60;
+        break;
+    case 'h':
+        number=number*60*60;
+        break;
+    case 'j':
+        number=number*60*60*24;//transformer en unité seconde
+        break;
+    default:
+        perror("parametre error");
+        break;
+    }
+    return number;
+}
+
 
 void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette fonction sert à concaténer les chemins
     
@@ -212,28 +233,40 @@ bool stateSize(char* parametre, char* chemin){
 bool stateDate(char* parametre,char* chemin){
     struct stat sb;
     time_t now=time(NULL);
-    struct tm tm_now = *localtime (&now);
-    
+    int diff_time_obj=timeToNumber(parametre);
+    //time_t temps=sb.st_atime;
+    //int diff_time=(int)difftime(now,temps);
+    //printf("diff%d\n",diff_time);
 
     if (stat(chemin,&sb)==-1){
         perror("stat ERREUR");
         exit(EXIT_FAILURE);
     } 
+    
     if (parametre[0]=='+') // + 3h ==>plus que trois heures
     {
+        //printf("Current Date/Time = %s", ctime(&now));
+        time_t temps=sb.st_atime;//je comprends pas pk il marche comme ça
         
-        printf("Current Date/Time = %s", ctime(&now));
-        time_t temps=&sb.st_atime;
-        double diff_time=difftime(now,temps);
-        printf("%d\n",diff_time);
-        char* tim_str=ctime(&sb.st_atime);
-
-        printf("chemin : %s dernier accès : %s octets\n",chemin,tim_str);
-        return true;
+        if ( (int) difftime(now,temps)>diff_time_obj)
+        {
+            printf("%d",(int) difftime(now,temps));
+            printf("chemin : %s dernier accès : %s s \n",chemin,ctime(&sb.st_atime));
+            return true;
+        }
+        
     }
     else if (parametre[0]=='-') //-3h ==>moins que trois heures
     {
-        /* code */
+        time_t temps=sb.st_atime;
+        if ( (int) difftime(now,temps)<diff_time_obj)
+        {
+            printf("%d",(int) difftime(now,temps));
+
+            printf("chemin : %s dernier accès : %s s \n",chemin,ctime(&sb.st_atime));
+            return true;
+        }
+        
     }
     else
     {
@@ -254,13 +287,13 @@ void date(char* parametre,char* chemin){
     {    
         char* nom = courant->d_name; 
         getChemin(chemin,nom,cheminP);
-        printf("chemin : %s \n",cheminP);
+        //printf("chemin : %s \n",cheminP);
 
         if (estFichier(courant)) // est un fichier
         {
 
             if(stateDate(parametre,cheminP)){
-                printf("ok ici\n");
+                
             }
             
         }
