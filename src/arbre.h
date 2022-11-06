@@ -7,9 +7,31 @@
 #include <stdbool.h>
 #include <string.h>
 #include <sys/stat.h>
-#include<time.h>
+#include <time.h>
 #include <unistd.h>
 #include <regex.h>
+#include <ctype.h> //pour isdigit()
+
+typedef struct Element{
+    char* chemin_fichier;
+    struct Element* next;
+}Element;
+
+typedef struct Liste{
+    struct Element* premier;
+}Liste;
+
+Liste* initialisationListe();
+
+void ajouter(Liste* liste, char* chemin_fichier);
+
+void afficherListe(Liste *liste);
+
+void supprimerListe(Liste* liste);
+
+
+
+
 
 bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
 
@@ -21,9 +43,11 @@ int timeToNumber(char* parametre);//transformer un paramètre de temps en un nom
 
 void parcourirDossier(char* chemin);
 
+Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametres, Liste* liste);
+
 void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin sera enregistré dans le paramettre enregistre
 
-bool commande_a_exec(char * commande, char* parametre, struct dirent* fichier);
+bool commande_a_exec(int indice_commande, char* parametre, struct dirent* fichier);
 
 void test();
 

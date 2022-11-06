@@ -5,7 +5,7 @@
 int main(int argc, char const *argv[]){
     
     printf("Hello world!\n");
-    char* chemin=".";//la racine de dossier, donné par question1
+    char* chemin = ".";//la racine de dossier, donné par question1
 
     //char* parametres[7]; //mettre les options de chaque commande à l'indice i qui correspond bien à la commande i dans la liste commandes
     //plutôt faire une dictionnaire => pas de structure dictionnaire mais table de hashage... avec à chaque alvéole la liste simplement chaînée des options
@@ -82,14 +82,16 @@ int main(int argc, char const *argv[]){
     */
 
    ////////////////AJOUT DANS LISTE DES COMMANDES DEMANDEES (et ajout du paramètre dans la liste des paramètres)
-
+    char* starting_point;
     char* options[12];
     char* parametres[12];
     int i = 1;
+
     while (argv[i] != NULL){
+
         switch (i){
             case 1:
-                char* starting_point = argv[1]; // d'où on commence la recherche
+                starting_point = argv[1]; // d'où on commence la recherche
                 printf("Départ : %s\n",starting_point);
                 break;
 
@@ -104,7 +106,7 @@ int main(int argc, char const *argv[]){
                 break;
 
             default:
-                if (argv[i][0] == '-' & !isdigit(argv[i][1])){ //si c'est bien une option et pas un paramètre comme -9k
+                if ( (argv[i][0] == '-') & (!isdigit(argv[i][1])) ){ //si c'est bien une option et pas un paramètre comme -9k
                     options[i-3] = argv[i];   
                     printf("Option %d : %s\n",i-3,argv[i]);
                     break;
@@ -116,9 +118,14 @@ int main(int argc, char const *argv[]){
                     break;
                 }
         }
+    i++;
     }
 
-    parcourir_choisir(chemin,options,parametres);    
+    Liste* liste_finale = parcourir_choisir(chemin,options,parametres,initialisationListe());
+
+    afficherListe(liste_finale);
+
+    supprimerListe(liste_finale);
 
     
     /*
@@ -129,7 +136,6 @@ int main(int argc, char const *argv[]){
 
     //date("-1h",chemin);
     //check_regex("a*","arbr.h");
-
-    return 0;
     */
+   return 0;
 }

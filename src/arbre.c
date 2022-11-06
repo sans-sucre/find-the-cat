@@ -108,7 +108,7 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
         char* nom = courant->d_name; //nom du fichier ou dossier
 
         //printf("name is : %s, coutinue ? : %d\n",courant->d_name,etatContinue(courant));
-        if(strcmp(nom,".")!=0 & strcmp(nom,"..")!=0 & nom[0]!='.'){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
+        if( (strcmp(nom,".")!=0) & (strcmp(nom,"..")!=0) & (nom[0]!='.') ){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
 
             getChemin(chemin,nom,cheminP);
             printf("%s\n",cheminP); //on print le chemin du dossier ou fichier
@@ -121,8 +121,77 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
     closedir(entree);
 }
 
-bool parcourir_choisir(char* chemin, char* options_demandees, char* parametres){
+Liste* initialisationListe(){
+
+    Liste* liste = malloc(sizeof(*liste));
+
+    if (liste == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    liste->premier = NULL;
+
+    return liste;
+}
+
+void ajouter(Liste* liste, char* chemin_fichier){
+    
+    Element* current = liste->premier;
+
+    Element* nouveau = malloc(sizeof(*nouveau));
+    
+    if (current != NULL){
+        while (current->next != NULL){
+            current = current->next;
+        }
+
+        nouveau->chemin_fichier = chemin_fichier;
+        current->next = nouveau;
+    }
+    
+    else{
+        nouveau->chemin_fichier = chemin_fichier;
+        current = nouveau;
+    }
+}
+
+void afficherListe(Liste *liste){
+    if (liste == NULL){
+        printf("La liste est NULL.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    Element* current = liste->premier;
+
+    while (current != NULL){
+        printf("%s", current->chemin_fichier);
+        current = current->next;
+    }
+}
+
+void supprimerListe(Liste* liste){
+    
+    if (liste == NULL){
+        printf("Suppression impossible : la liste est NULL.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (liste->premier != NULL){
+
+        while (liste->premier->next != NULL){ //tant que le suivant n'est pas nul
+            Element* aSupprimer = liste->premier;
+            liste->premier = aSupprimer->next;
+            free(aSupprimer);
+        }
+        free(liste->premier);
+    }
+    free(liste);
+}
+
+Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametres, Liste* liste){
     //////////////////PARCOURS DE L'ARBORESCENCE
+    printf("\n\nEntrée dans parcourir_choisir, chemin = %s\n",chemin);
 
     char* options[]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
 
@@ -139,32 +208,50 @@ bool parcourir_choisir(char* chemin, char* options_demandees, char* parametres){
     {    
         char* nom = courant->d_name; //nom du fichier ou dossier
 
-        if(strcmp(nom,".")!=0 & strcmp(nom,"..")!=0 & nom[0]!='.'){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
+        if( (strcmp(nom,".")!=0) & (strcmp(nom,"..")!=0) & (nom[0]!='.') ){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
 
             getChemin(chemin,nom,cheminP);
 
             if (!etatContinue(courant)){ //si c'est un fichier
+
+                bool status = true;
                 
                 for (int j = 0 ; j < taille ; j++){ //pour chaque option demandée
+                    printf("j : %d\n",j);
+                    printf("Option demandée %d : %s\n",j,options_demandees[j]);
+
                     for (int i = 0 ; i < taille ; i++){ //parcours tableau des options connues/demandables
+                        printf("Option connue %d : %s\n",i,options[i]);
+                        
                         if (strcmp(options_demandees[j],options[i]) == 0){ //on trouve l'indice de la fonction demandée
+                            
+                            printf("Booléen : %d\n",commande_a_exec(i,parametres[j],courant));
+
                             if (!commande_a_exec(i,parametres[j],courant)){    //on l'exécute avec son paramètre et on voit si le fichier correspond
-                                return false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
+                                status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
+                                break;
                             }  
                         }
                     }
-                }
-                return true; //le fichier valide toutes les conditions
+                    if (!status){
+                        break;
+                    }
                     
-                printf("%s\n",cheminP); //on print le chemin du fichier
+                }
+                if (status){
+                    ajouter(liste,cheminP); //le fichier valide toutes les conditions
+                    printf("%s\n",cheminP); //on print le chemin du fichier
+                }
             }
 
             else{ //si c'est un dossier
-                parcourir_choisir(cheminP,options,parametres);
+                liste = parcourir_choisir(cheminP,options_demandees,parametres,liste);
             }    
         } 
     }
+    return liste;
     closedir(entree);
+
 }
 
 //fonctions qui correspondent aux commandes (bien si c'est du même nom)
@@ -331,13 +418,13 @@ bool dir(char* parametre, struct dirent* fichier){
     return;
 }
 
-bool commande_a_exec(int commande_exec,char* parametre,struct dirent* fichier){
+bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier){
 
-    switch (commande_exec)
+    switch (indice_commande)
     {
     case 0:
         test();
-        break;
+        return false;
     
     case 1:
         return name(parametre,fichier);
@@ -359,7 +446,7 @@ bool commande_a_exec(int commande_exec,char* parametre,struct dirent* fichier){
 
     default:
         printf("Erreur : option non reconnue.\n");
-        break;
+        return false;
     }
 }
 
