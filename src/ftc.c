@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "arbre.h"
+#include "liste.h"
 
 
 int main(int argc, char const *argv[]){
@@ -80,7 +81,7 @@ int main(int argc, char const *argv[]){
         }
     }
     */
-
+   /*
    ////////////////AJOUT DANS LISTE DES COMMANDES DEMANDEES (et ajout du paramètre dans la liste des paramètres)
     char* starting_point;
     char* options[12];
@@ -120,12 +121,15 @@ int main(int argc, char const *argv[]){
         }
     i++;
     }
-
-    parcourirDossier(chemin);
+*/
+    //parcourirDossier(chemin);
 
     //Liste* liste_finale = parcourir_choisir(chemin,options,parametres,initialisationListe());
-
-    //afficherListe(liste_finale);
+    Liste* liste_finale=initialisationListe();
+    //printf("ok ici\n");
+    ajouter(liste_finale,".65");
+    printf("ok ici3\n");
+    afficherListe(liste_finale);
 
     //supprimerListe(liste_finale);
 

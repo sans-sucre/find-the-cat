@@ -1,6 +1,6 @@
 #ifndef __ARBRE__
-#define __ARBRE__   //sert à quoi ?
-
+#define __ARBRE__   
+#include "liste.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
@@ -11,23 +11,6 @@
 #include <unistd.h>
 #include <regex.h>
 #include <ctype.h> //pour isdigit()
-
-typedef struct Element{
-    char* chemin_fichier;
-    struct Element* next;
-}Element;
-
-typedef struct Liste{
-    struct Element* premier;
-}Liste;
-
-Liste* initialisationListe();
-
-void ajouter(Liste* liste, char* chemin_fichier);
-
-void afficherListe(Liste *liste);
-
-void supprimerListe(Liste* liste);
 
 
 

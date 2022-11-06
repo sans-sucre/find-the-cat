@@ -121,73 +121,6 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
     closedir(entree);
 }
 
-Liste* initialisationListe(){
-
-    Liste* liste = malloc(sizeof(*liste));
-
-    if (liste == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
-
-    liste->premier = NULL;
-
-    return liste;
-}
-
-void ajouter(Liste* liste, char* chemin_fichier){
-    
-    Element* current = liste->premier;
-
-    Element* nouveau = malloc(sizeof(*nouveau));
-    
-    if (current != NULL){
-        while (current->next != NULL){
-            current = current->next;
-        }
-
-        nouveau->chemin_fichier = chemin_fichier;
-        current->next = nouveau;
-    }
-    
-    else{
-        nouveau->chemin_fichier = chemin_fichier;
-        current = nouveau;
-    }
-}
-
-void afficherListe(Liste *liste){
-    if (liste == NULL){
-        printf("La liste est NULL.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    Element* current = liste->premier;
-
-    while (current != NULL){
-        printf("%s", current->chemin_fichier);
-        current = current->next;
-    }
-}
-
-void supprimerListe(Liste* liste){
-    
-    if (liste == NULL){
-        printf("Suppression impossible : la liste est NULL.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    if (liste->premier != NULL){
-
-        while (liste->premier->next != NULL){ //tant que le suivant n'est pas nul
-            Element* aSupprimer = liste->premier;
-            liste->premier = aSupprimer->next;
-            free(aSupprimer);
-        }
-        free(liste->premier);
-    }
-    free(liste);
-}
 
 Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametres, Liste* liste){
     //////////////////PARCOURS DE L'ARBORESCENCE
@@ -208,11 +141,11 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
     {    
         char* nom = courant->d_name; //nom du fichier ou dossier
 
-        if( (strcmp(nom,".")!=0) & (strcmp(nom,"..")!=0) & (nom[0]!='.') ){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
+        if(etatContinue(courant) ){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
 
             getChemin(chemin,nom,cheminP);
 
-            if (!etatContinue(courant)){ //si c'est un fichier
+            if (estFichier(courant)){ //si c'est un fichier
 
                 bool status = true;
                 
