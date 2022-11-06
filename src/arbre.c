@@ -96,7 +96,7 @@ void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette f
 }
 
 void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
-    //initialisation, on ouvre le dossier en fonction de chemin donné
+    //initialisation, on ouvre le dossier en fonction du chemin donné
     DIR* entree = opendir(chemin);
     struct dirent* courant = NULL;//structure après readdir
 
@@ -112,10 +112,6 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
 
             getChemin(chemin,nom,cheminP);
             printf("%s\n",cheminP); //on print le chemin du dossier ou fichier
-            
-            if (nom[0]=='.'){   //ici pas possible comme j'ai fait, ça sert à quoi ?
-                printf("occurence 0 : %c\n",courant->d_name[0]);
-            }
 
             if (etatContinue(courant)){ //si c'est un dossier
                 parcourirDossier(cheminP);
@@ -125,45 +121,70 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
     closedir(entree);
 }
 
+bool parcourir_choisir(char* chemin, char* options_demandees, char* parametres){
+    //////////////////PARCOURS DE L'ARBORESCENCE
 
-//fonctions qui correspondent aux commandes (bien si c'est du même nom)
+    char* options[]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
 
-void test(){
-    printf("Fonction test\n");
-    return;
-}
+    //la taille du tableau
+    long int taille = sizeof(options)/sizeof(options[0]);
 
-char** name(char* parametre, char* chemin){
-    printf("Fonction name\n");
-
-    char** res = malloc (sizeof(char*)*100);
-    
     //initialisation, on ouvre le dossier en fonction du chemin donné
     DIR* entree = opendir(chemin);
     struct dirent* courant = NULL;//structure après readdir
 
     char cheminP[200];//place pour enregistrer le prochain chemin
     
-    while ((courant = readdir(entree))!= NULL){    
+    while ((courant = readdir(entree))!= NULL)
+    {    
         char* nom = courant->d_name; //nom du fichier ou dossier
 
-        
-            if(strcmp(nom,".")!=0 & strcmp(nom,"..")!=0 & nom[0]!='.'){ //on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
-                if (!etatContinue(courant)){ //si ce n'est pas un dossier
-                
-                    if (strcmp(nom,parametre) == 0){
-                        getChemin(chemin,nom,cheminP);
-                        printf("%s\n",cheminP); //on print le chemin du dossier ou fichier demandé
+        if(strcmp(nom,".")!=0 & strcmp(nom,"..")!=0 & nom[0]!='.'){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
 
+            getChemin(chemin,nom,cheminP);
+
+            if (!etatContinue(courant)){ //si c'est un fichier
+                
+                for (int j = 0 ; j < taille ; j++){ //pour chaque option demandée
+                    for (int i = 0 ; i < taille ; i++){ //parcours tableau des options connues/demandables
+                        if (strcmp(options_demandees[j],options[i]) == 0){ //on trouve l'indice de la fonction demandée
+                            if (!commande_a_exec(i,parametres[j],courant)){    //on l'exécute avec son paramètre et on voit si le fichier correspond
+                                return false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
+                            }  
+                        }
                     }
                 }
+                return true; //le fichier valide toutes les conditions
+                    
+                printf("%s\n",cheminP); //on print le chemin du fichier
             }
-            else{
-                parcourirDossier(cheminP);
+
+            else{ //si c'est un dossier
+                parcourir_choisir(cheminP,options,parametres);
             }    
         } 
+    }
     closedir(entree);
-    return res;
+}
+
+//fonctions qui correspondent aux commandes (bien si c'est du même nom)
+
+
+
+void test(){
+    printf("Fonction test\n");
+    return;
+}
+
+bool name(char* parametre, struct dirent* fichier){
+    printf("Fonction name\n");  
+
+    char* nom = fichier->d_name; //nom du fichier ou dossier
+
+    if (strcmp(nom,parametre) == 0){ //si le nom est correct
+        return true;
+    }
+    return false;
 }
 
 void size(char* parametre,char* chemin){
@@ -297,33 +318,20 @@ void date(char* parametre,char* chemin){
     closedir(entree);
     
 }
-void mime(char* parametre){
+bool mime(char* parametre, struct dirent* fichier){
     printf("Fonction mime\n");
     return;
 }
-void ctc(char* parametre){
+bool ctc(char* parametre, struct dirent* fichier){
     printf("Fonction ctc\n");
     return;
 }
-void dir(char* parametre){
+bool dir(char* parametre, struct dirent* fichier){
     printf("Fonction dir\n");
     return;
 }
 
-void commande_a_exec(char* commande,char* parametre){
-    char* commandes[]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
-
-    //la taille du tableau peut changer donc on la met dans une variable plutôt qu'en dur 
-    long int taille = sizeof(commandes)/sizeof(commandes[0]);
-    //printf("Size tableau : %ld\n", taille);
-
-    int commande_exec;
-
-    for (int i = 0 ; i < taille ; i++){
-        if (strcmp(commande,commandes[i]) == 0){ //on trouve l'indice de la commande qui correspond à la commande demandée
-            commande_exec = i;  //on le sauvegarde pour le switch
-        }
-    }
+bool commande_a_exec(int commande_exec,char* parametre,struct dirent* fichier){
 
     switch (commande_exec)
     {
@@ -332,31 +340,25 @@ void commande_a_exec(char* commande,char* parametre){
         break;
     
     case 1:
-        name(parametre);
-        break;
+        return name(parametre,fichier);
 
     case 2:
-        size(parametre,"");// à modifier
-        break;
+        return stateSize(parametre,"");// à modifier
 
     case 3:
-        date(parametre,"");// à modifier
-        break;
+        return stateDate(parametre,"");// à modifier
 
     case 4:
-        mime(parametre);
-        break;
+        return mime(parametre,fichier);
 
     case 5:
-        ctc(parametre);
-        break;
+        return ctc(parametre,fichier);
 
     case 6:
-        dir(parametre);
-        break;
+        return dir(parametre,fichier);
 
     default:
-        printf("Erreur, commande non reconnue.\n");
+        printf("Erreur : option non reconnue.\n");
         break;
     }
 }

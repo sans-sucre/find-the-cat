@@ -23,11 +23,11 @@ void parcourirDossier(char* chemin);
 
 void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin sera enregistré dans le paramettre enregistre
 
-void commande_a_exec(char * commande, char* parametre);
+bool commande_a_exec(char * commande, char* parametre, struct dirent* fichier);
 
 void test();
 
-char** name(char* parametre, char* chemin);
+bool name(char* parametre, struct dirent* fichier);
 
 void size(char* parametre,char* chemin);
 
@@ -37,11 +37,11 @@ void date(char* parametre,char* chemin);
 
 bool stateDate(char* parametre,char* chemin);
 
-void mime(char* parametre, char* chemin);
+bool mime(char* parametre, struct dirent* fichier);
 
-void ctc(char* parametre, char* chemin);
+bool ctc(char* parametre, struct dirent* fichier);
 
-void dir(char* parametre, char* chemin);
+bool dir(char* parametre, struct dirent* fichier);
 
 bool check_regex(char* parametre, char* nom);
 
