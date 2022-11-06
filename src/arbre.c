@@ -37,7 +37,7 @@ void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette f
 
 }
 
-int parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
+void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
     //initialisation, on ouvre le dossier en fonction de chemin donné
     DIR* entree = opendir(chemin);
     struct dirent* courant = NULL;//structure après readdir
@@ -81,9 +81,6 @@ void name(char* parametre){
     printf("Fonction name\n");
     //faut modifier parcoursdossier pour qu'il fasse une comparaison à chaque dossier ou on prend les lignes qu'il nous donne à la fin et on cherche dans la string ??
     //analyser la string à la fin sera plus simple jpense et c'est mieux par rapport à ce qui est demandé
-    
-    int nb_files_dir = parcourirDossier(".");
-    int i = 0; //nb de boucles
     
     char *line = malloc(sizeof(char)*100);
 
@@ -138,7 +135,7 @@ void dir(char* parametre){
 }
 
 void commande_a_exec(char* commande,char* parametre){
-    char* commandes[]={'-test','-name','-size','-date','-mime','-ctc','-dir'};
+    char* commandes[]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
 
     //la taille du tableau peut changer donc on la met dans une variable plutôt qu'en dur 
     long int taille = sizeof(commandes)/sizeof(commandes[0]);

@@ -10,7 +10,7 @@
 
 bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
 
-int parcourirDossier(char* chemin);
+void parcourirDossier(char* chemin);
 
 void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin sera enregistré dans le paramettre enregistre
 
@@ -19,8 +19,6 @@ void commande_a_exec(char * commande, char* parametre);
 void test();
 
 void name(char* parametre);
-
-char** parser(int nb_files_dir);
 
 void size(char* parametre);
 
