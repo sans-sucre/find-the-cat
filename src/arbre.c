@@ -15,6 +15,64 @@ bool etatContinue(struct dirent* entree){
         return false;
     }
 }
+
+bool estFichier(struct dirent* entree){
+    if(entree->d_type==DT_REG){
+        
+        if((entree->d_name)[0]=='.'){//on prend pas en compte le dossier courant ou le dossier précédent
+            return false;
+        }
+        return true;
+        
+    }
+    return false;
+}
+
+int sizeToNumber(char* parametre){
+    int number=abs(atoi(parametre));
+
+    switch (parametre[strlen(parametre)-1])
+    {
+    case 'c':
+        break;
+    case 'k':
+        number=number*1024;
+        break;
+    case 'm':
+        number=number*1024*1024;
+        break;
+    case 'G':
+        number=number*1024*1024*1024;
+        break;
+    default:
+        perror("parametre error");
+        break;
+    }
+    return number;
+}
+
+int timeToNumber(char* parametre){
+    int number=abs(atoi(parametre));
+
+    switch (parametre[strlen(parametre)-1])
+    {
+    case 'm':
+        number=number*60;
+        break;
+    case 'h':
+        number=number*60*60;
+        break;
+    case 'j':
+        number=number*60*60*24;//transformer en unité seconde
+        break;
+    default:
+        perror("parametre error");
+        break;
+    }
+    return number;
+}
+
+
 void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette fonction sert à concaténer les chemins
     
     int tailleA=strlen(cheminAncien);
@@ -77,13 +135,14 @@ void test(){
     printf("Fonction test\n");
     return;
 }
+
 void name(char* parametre){
     printf("Fonction name\n");
     //faut modifier parcoursdossier pour qu'il fasse une comparaison à chaque dossier ou on prend les lignes qu'il nous donne à la fin et on cherche dans la string ??
     //analyser la string à la fin sera plus simple jpense et c'est mieux par rapport à ce qui est demandé
     
     char *line = malloc(sizeof(char)*100);
-
+    /*
     while(i < nb_files_dir){  //tant qu'on a pas regardé tous les fichiers/dossiers trouvés
         fgets(line, sizeof(line), stdin);
 
@@ -111,15 +170,139 @@ void name(char* parametre){
 
         i++;
     }
+    */
+}
+
+void size(char* parametre,char* chemin){
+
+    DIR* entree = opendir(chemin);
+    struct dirent* courant = NULL;
+    char cheminP[200];
+    
+    while ((courant = readdir(entree))!= NULL)
+    {    
+        char* nom = courant->d_name; 
+        getChemin(chemin,nom,cheminP);
+
+        if (estFichier(courant)) // est un fichier
+        {
+            if(stateSize(parametre,cheminP)){
+                //printf("chemin : %s \n",cheminP);
+            }
+        }
+        if (etatContinue(courant)){ 
+            
+            size(parametre,cheminP);
+        }    
+    }
+    closedir(entree);
     
 }
-void size(char* parametre){
-    printf("Fonction size\n");
-    return;
+
+bool stateSize(char* parametre, char* chemin){
+    struct stat sb;
+    if (stat(chemin,&sb)==-1){
+        perror("stat ERREUR");
+        exit(EXIT_FAILURE);
+    } 
+
+    if(parametre[0]=='+'){
+        if ((long long)sb.st_size > sizeToNumber(parametre))
+        {
+            printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
+            return true;
+        }    
+    }
+    else if(parametre[0]=='-')
+    {
+        if ((long long)sb.st_size < sizeToNumber(parametre))
+        {
+            //printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
+            return true;
+        }    
+    }
+    else
+    {
+        perror("paramètre erreur, caractère dehors '+''-'\n");
+        exit(EXIT_FAILURE);
+    }
+    return false;
 }
-void date(char* parametre){
-    printf("Fonction date\n");
-    return;
+
+bool stateDate(char* parametre,char* chemin){
+    struct stat sb;
+    time_t now=time(NULL);
+    int diff_time_obj=timeToNumber(parametre);
+    //time_t temps=sb.st_atime;
+    //int diff_time=(int)difftime(now,temps);
+    //printf("diff%d\n",diff_time);
+
+    if (stat(chemin,&sb)==-1){
+        perror("stat ERREUR");
+        exit(EXIT_FAILURE);
+    } 
+    
+    if (parametre[0]=='+') // + 3h ==>plus que trois heures
+    {
+        //printf("Current Date/Time = %s", ctime(&now));
+        time_t temps=sb.st_atime;//je comprends pas pk il marche comme ça
+        
+        if ( (int) difftime(now,temps)>diff_time_obj)
+        {
+            printf("%d",(int) difftime(now,temps));
+            printf("chemin : %s dernier accès : %s s \n",chemin,ctime(&sb.st_atime));
+            return true;
+        }
+        
+    }
+    else if (parametre[0]=='-') //-3h ==>moins que trois heures
+    {
+        time_t temps=sb.st_atime;
+        if ( (int) difftime(now,temps)<diff_time_obj)
+        {
+            printf("%d",(int) difftime(now,temps));
+
+            printf("chemin : %s dernier accès : %s s \n",chemin,ctime(&sb.st_atime));
+            return true;
+        }
+        
+    }
+    else
+    {
+        perror("paramètre erreur, caractère dehors '+''-'\n");
+        exit(EXIT_FAILURE);
+    }
+    return false;
+}
+
+
+void date(char* parametre,char* chemin){
+    
+    DIR* entree = opendir(chemin);
+    struct dirent* courant = NULL;
+    char cheminP[200];
+    
+    while ((courant = readdir(entree))!= NULL)
+    {    
+        char* nom = courant->d_name; 
+        getChemin(chemin,nom,cheminP);
+        //printf("chemin : %s \n",cheminP);
+
+        if (estFichier(courant)) // est un fichier
+        {
+
+            if(stateDate(parametre,cheminP)){
+                
+            }
+            
+        }
+        if (etatContinue(courant)){ 
+            
+            date(parametre,cheminP);
+        }    
+    }
+    closedir(entree);
+    
 }
 void mime(char* parametre){
     printf("Fonction mime\n");
@@ -161,11 +344,11 @@ void commande_a_exec(char* commande,char* parametre){
         break;
 
     case 2:
-        size(parametre);
+        size(parametre,"");// à modifier
         break;
 
     case 3:
-        date(parametre);
+        date(parametre,"");// à modifier
         break;
 
     case 4:
@@ -184,4 +367,32 @@ void commande_a_exec(char* commande,char* parametre){
         printf("Erreur, commande non reconnue.\n");
         break;
     }
+}
+
+bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui passer un const char
+    regex_t preg;
+    
+    int err = regcomp (&preg, parametre, REG_NOSUB | REG_EXTENDED);//on compile la chaîne de caractères 
+    if (err == 0)//pas d'erreur
+    {
+        int match = regexec (&preg,nom, 0, NULL, 0);
+        regfree (&preg);
+
+        if (match == 0)
+        {
+            printf ("%s est un fichier valide\n", nom);
+            return true;
+        }
+        else if (match == REG_NOMATCH)
+        {
+            printf ("%s n\'est pas un fichier valide\n", nom);
+            return false;
+        }
+    }
+    else
+    {
+        perror("erreur de compilation de regex\n");
+        exit(EXIT_FAILURE);
+    }
+    
 }

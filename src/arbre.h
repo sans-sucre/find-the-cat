@@ -6,9 +6,18 @@
 #include <dirent.h>
 #include <stdbool.h>
 #include <string.h>
-
+#include <sys/stat.h>
+#include<time.h>
+#include <unistd.h>
+#include <regex.h>
 
 bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
+
+bool estFichier(struct dirent* entree);
+
+int sizeToNumber(char* parametre);//transformer un paramètre en un nombre
+
+int timeToNumber(char* parametre);//transformer un paramètre de temps en un nombre
 
 void parcourirDossier(char* chemin);
 
@@ -20,9 +29,15 @@ void test();
 
 void name(char* parametre);
 
-void size(char* parametre);
+char** parser(int nb_files_dir);
 
-void date(char* parametre);
+void size(char* parametre,char* chemin);
+
+bool stateSize(char* parametre, char* chemin);
+
+void date(char* parametre,char* chemin);
+
+bool stateDate(char* parametre,char* chemin);
 
 void mime(char* parametre);
 
@@ -30,7 +45,7 @@ void ctc(char* parametre);
 
 void dir(char* parametre);
 
-
+bool check_regex(char* parametre, char* nom);
 
 
 
