@@ -100,8 +100,6 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
     DIR* entree = opendir(chemin);
     struct dirent* courant = NULL;//structure après readdir
 
-    static int nb_files_dir = 0;
-
     char cheminP[200];//seule façon à enregistrer le prochain chemin
     //printf("chemin courant : %s\n",chemin);
     
@@ -111,7 +109,7 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
 
         //printf("name is : %s, coutinue ? : %d\n",courant->d_name,etatContinue(courant));
         if(strcmp(nom,".")!=0 & strcmp(nom,"..")!=0 & nom[0]!='.'){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
-            nb_files_dir++;
+
             getChemin(chemin,nom,cheminP);
             printf("%s\n",cheminP); //on print le chemin du dossier ou fichier
             
@@ -125,7 +123,6 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
         } 
     }
     closedir(entree);
-    return nb_files_dir;
 }
 
 
@@ -136,41 +133,37 @@ void test(){
     return;
 }
 
-void name(char* parametre){
+char** name(char* parametre, char* chemin){
     printf("Fonction name\n");
-    //faut modifier parcoursdossier pour qu'il fasse une comparaison à chaque dossier ou on prend les lignes qu'il nous donne à la fin et on cherche dans la string ??
-    //analyser la string à la fin sera plus simple jpense et c'est mieux par rapport à ce qui est demandé
+
+    char** res = malloc (sizeof(char*)*100);
     
-    char *line = malloc(sizeof(char)*100);
-    /*
-    while(i < nb_files_dir){  //tant qu'on a pas regardé tous les fichiers/dossiers trouvés
-        fgets(line, sizeof(line), stdin);
+    //initialisation, on ouvre le dossier en fonction du chemin donné
+    DIR* entree = opendir(chemin);
+    struct dirent* courant = NULL;//structure après readdir
 
-        printf("Ligne : %s\n",line);
+    char cheminP[200];//place pour enregistrer le prochain chemin
+    
+    while ((courant = readdir(entree))!= NULL){    
+        char* nom = courant->d_name; //nom du fichier ou dossier
 
-        line[strcspn(line, "\n")] = 0; //enlever le \n à la fin de la ligne
         
-        char* ligne;
-        strcpy(ligne,line); //on peut copier la ligne comme on perd l'original en faisant strtok
+            if(strcmp(nom,".")!=0 & strcmp(nom,"..")!=0 & nom[0]!='.'){ //on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
+                if (!etatContinue(courant)){ //si ce n'est pas un dossier
+                
+                    if (strcmp(nom,parametre) == 0){
+                        getChemin(chemin,nom,cheminP);
+                        printf("%s\n",cheminP); //on print le chemin du dossier ou fichier demandé
 
-        int init_size = strlen(line);
-        char delim[] = "/";
-
-        char* word = strtok(line, delim); //premier cut au premier délimiteur, mais on a besoin de répéter cette opération pour cut sur toute la ligne
-
-        while(word != NULL){
-            printf("%s\n", word); //ce qui a été cuté
-            if (strcmp(word,parametre) == 0){   //si on l'a trouvé dans cette line <==> ce chemin
-                printf("%s\n",line);    //on affiche le chemin
-                return;
+                    }
+                }
             }
-
-            word = strtok(NULL, delim);  //pourquoi NULL ?
-        }
-
-        i++;
-    }
-    */
+            else{
+                parcourirDossier(cheminP);
+            }    
+        } 
+    closedir(entree);
+    return res;
 }
 
 void size(char* parametre,char* chemin){
@@ -322,13 +315,12 @@ void commande_a_exec(char* commande,char* parametre){
 
     //la taille du tableau peut changer donc on la met dans une variable plutôt qu'en dur 
     long int taille = sizeof(commandes)/sizeof(commandes[0]);
+    //printf("Size tableau : %ld\n", taille);
 
     int commande_exec;
 
-    printf("Size tableau : %ld\n", taille);
-
     for (int i = 0 ; i < taille ; i++){
-        if (strcmp(commande,commandes[i])){ //on trouve l'indice de la commande qui correspond à la commande demandée
+        if (strcmp(commande,commandes[i]) == 0){ //on trouve l'indice de la commande qui correspond à la commande demandée
             commande_exec = i;  //on le sauvegarde pour le switch
         }
     }

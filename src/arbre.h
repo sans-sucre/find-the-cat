@@ -27,9 +27,7 @@ void commande_a_exec(char * commande, char* parametre);
 
 void test();
 
-void name(char* parametre);
-
-char** parser(int nb_files_dir);
+char** name(char* parametre, char* chemin);
 
 void size(char* parametre,char* chemin);
 
@@ -39,11 +37,11 @@ void date(char* parametre,char* chemin);
 
 bool stateDate(char* parametre,char* chemin);
 
-void mime(char* parametre);
+void mime(char* parametre, char* chemin);
 
-void ctc(char* parametre);
+void ctc(char* parametre, char* chemin);
 
-void dir(char* parametre);
+void dir(char* parametre, char* chemin);
 
 bool check_regex(char* parametre, char* nom);
 
