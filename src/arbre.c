@@ -124,7 +124,6 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
 
 Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametres, Liste* liste){
     //////////////////PARCOURS DE L'ARBORESCENCE
-    printf("\n\nEntrée dans parcourir_choisir, chemin = %s\n",chemin);
 
     char* options[100*sizeof(char*)]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
 
@@ -181,9 +180,7 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
                 }
                 
                 else{ //option -dir aka sur les dossiers
-                printf("Option dir\n");
                     if (etatContinue(courant)){ //si c'est un dossier
-                        printf("Option dir et c'est un dossier\n");
                         if (!commande_a_exec(6,parametres[j],courant)){    //on exécute dir avec son paramètre et on voit si le fichier correspond
                             status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
                         }  
@@ -199,16 +196,11 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
             
             if (status){
                 ajouter(liste,cheminP); //le fichier/dossier valide toutes les conditions
-                printf("A tout validé : %s\n",cheminP); //on print le chemin du fichier/dossier
-                afficherListe(liste);
+                //printf("A tout validé : %s\n",cheminP); //on print le chemin du fichier/dossier
             }
             
             if (etatContinue(courant)){ //si dossier
-                printf("Liste avant parcours dossier : ");
-                afficherListe(liste);
                 liste = parcourir_choisir(cheminP,options_demandees,parametres,liste);  //j'analyse les fichiers/dossiers de ce dossier
-                printf("Liste après parcours dossier : ");
-                afficherListe(liste);
             }
             
         }
