@@ -126,6 +126,8 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
     //////////////////PARCOURS DE L'ARBORESCENCE
     printf("\n\nEntrée dans parcourir_choisir, chemin = %s\n",chemin);
 
+    printf("test");
+
     char* options[]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
 
     //la taille du tableau
