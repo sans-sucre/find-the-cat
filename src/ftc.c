@@ -84,7 +84,7 @@ int main(int argc, char const *argv[]){
 
    ////////////////AJOUT DANS LISTE DES COMMANDES DEMANDEES (et ajout du paramètre dans la liste des paramètres)
     char* starting_point;
-    char* options[12];//nuffer problème
+    char* options[12];//buffer problème
     char* parametres[12];// buffer problème
     int i = 1;
 
@@ -124,11 +124,14 @@ int main(int argc, char const *argv[]){
 
     //parcourirDossier(chemin);
 
-    Liste* liste_finale = parcourir_choisir(chemin,options,parametres,initialisationListe());
+    //Liste* liste_finale = parcourir_choisir(chemin,options,parametres,initialisationListe());
+    //Liste* liste_finale=initialisationListe();
+    //ajouter(liste_finale,"00.txt");
+    //afficherListe(liste_finale);
+    //supprimerListe(liste_finale);
     
-    /*
-    //parcourirDossier(chemin);
-
+    parcourirDossier(chemin);
+/*
     commande_a_exec(commande,parametre);    //on exécute la command demandée avec le parametre donné
     //si le paramètre n'est pas correct, ce sera dans la fonction qu'il sera analysé et jugé mauvais
 
