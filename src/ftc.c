@@ -5,8 +5,8 @@
 
 int main(int argc, char const *argv[]){
     
-    printf("Hello world!\n");
-    char* chemin = ".";//la racine de dossier, donné par question1
+    //printf("Hello world!\n");
+    //char* chemin = ".";//la racine de dossier, donné par question1
 
     //char* parametres[7]; //mettre les options de chaque commande à l'indice i qui correspond bien à la commande i dans la liste commandes
     //plutôt faire une dictionnaire => pas de structure dictionnaire mais table de hashage... avec à chaque alvéole la liste simplement chaînée des options
@@ -84,8 +84,8 @@ int main(int argc, char const *argv[]){
 
    ////////////////AJOUT DANS LISTE DES COMMANDES DEMANDEES (et ajout du paramètre dans la liste des paramètres)
     char* starting_point;
-    char* options[12];//nuffer problème
-    char* parametres[12];// buffer problème
+    char* options[12*sizeof(char*)];//buffer problème
+    char* parametres[12*sizeof(char*)];// buffer problème
     int i = 1;
 
     while (argv[i] != NULL){
@@ -122,13 +122,14 @@ int main(int argc, char const *argv[]){
     i++;
     }
 
-    parcourirDossier(chemin);
-
     //Liste* liste_finale = parcourir_choisir(chemin,options,parametres,initialisationListe());
-    
-    /*
-    //parcourirDossier(chemin);
-
+    //Liste* liste_finale=initialisationListe();
+    //ajouter(liste_finale,"00.txt");
+    //afficherListe(liste_finale);
+    //supprimerListe(liste_finale);
+    printf("%s\n",starting_point);
+    parcourirDossier(starting_point);
+/*
     commande_a_exec(commande,parametre);    //on exécute la command demandée avec le parametre donné
     //si le paramètre n'est pas correct, ce sera dans la fonction qu'il sera analysé et jugé mauvais
 

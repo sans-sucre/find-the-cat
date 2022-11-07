@@ -14,6 +14,9 @@ liste.o :
 	$(CC) -o $(BIN)liste.o -c $(SRC)liste.c $(CFLAGS)
 
 
+
+
+
 #outils 
 clean :
 	rm -r $(BIN)*.o

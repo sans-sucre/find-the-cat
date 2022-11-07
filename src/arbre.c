@@ -75,8 +75,8 @@ int timeToNumber(char* parametre){
 
 void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette fonction sert à concaténer les chemins
     
-    int tailleA=strlen(cheminAncien);
-    int tailleC=strlen(objCourant);
+    int tailleA=strlen(cheminAncien)+4;
+    int tailleC=strlen(objCourant)+4;
     
     char cheminA[tailleA];//chemin ancien
     strcpy(cheminA,cheminAncien);
@@ -88,7 +88,7 @@ void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette f
     char* cheminAncienSlash=strcat(cheminA,"/");
     
     int tailleA2=strlen(cheminAncienSlash);
-    char cheminCat[tailleA2];
+    char cheminCat[tailleA2+tailleC];
     strcpy(cheminCat,cheminAncienSlash);
     strcat(cheminCat,objCourant);
     strcpy(enregistre,cheminCat);
@@ -125,8 +125,6 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
 Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametres, Liste* liste){
     //////////////////PARCOURS DE L'ARBORESCENCE
     printf("\n\nEntrée dans parcourir_choisir, chemin = %s\n",chemin);
-
-    printf("test");
 
     char* options[]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
 
