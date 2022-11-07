@@ -48,7 +48,7 @@ bool mime(char* parametre, struct dirent* fichier);
 
 bool ctc(char* parametre, struct dirent* fichier);
 
-bool dir(char* parametre, struct dirent* fichier);
+bool dir(char* parametre, struct dirent* dossier);
 
 bool check_regex(char* parametre, char* nom);
 
