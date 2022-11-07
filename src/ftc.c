@@ -127,7 +127,7 @@ int main(int argc, char const *argv[]){
     //ajouter(liste_finale,"00.txt");
     //afficherListe(liste_finale);
     //supprimerListe(liste_finale);
-    printf("%s\n",starting_point);
+    
     parcourirDossier(starting_point);
 /*
     commande_a_exec(commande,parametre);    //on exécute la command demandée avec le parametre donné

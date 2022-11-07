@@ -126,10 +126,12 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
     //////////////////PARCOURS DE L'ARBORESCENCE
     printf("\n\nEntrée dans parcourir_choisir, chemin = %s\n",chemin);
 
-    char* options[]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
+    char* options[12*sizeof(char*)]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
 
     //la taille du tableau
-    long int taille = sizeof(options)/sizeof(options[0]);
+    //long int taille = sizeof(options)/sizeof(options[0]);
+
+    int taille = 7;
 
     //initialisation, on ouvre le dossier en fonction du chemin donné
     DIR* entree = opendir(chemin);
@@ -182,9 +184,9 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
             }    
         } 
     }
-    return liste;
-    closedir(entree);
 
+    closedir(entree);
+    return liste;
 }
 
 //fonctions qui correspondent aux commandes (bien si c'est du même nom)
