@@ -122,9 +122,9 @@ int main(int argc, char const *argv[]){
     i++;
     }
 
-    //parcourirDossier(chemin);
+    parcourirDossier(chemin);
 
-    Liste* liste_finale = parcourir_choisir(chemin,options,parametres,initialisationListe());
+    //Liste* liste_finale = parcourir_choisir(chemin,options,parametres,initialisationListe());
     
     /*
     //parcourirDossier(chemin);
