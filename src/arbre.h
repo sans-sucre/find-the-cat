@@ -52,6 +52,7 @@ bool dir(char* parametre, struct dirent* dossier);
 
 bool check_regex(char* parametre, char* nom);
 
+int give_value(char* option);//donner la valeur d'un flag, si c'est pas une option, alors -1
 
 
 

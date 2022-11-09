@@ -483,3 +483,18 @@ bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui pas
     }
     
 }
+
+
+
+int give_value(char* option){
+    char* options[12]={"-test","-name","-size","-date","-mime","-ctc","-dir","-color","-perm","-link","-threads","-ou"};
+    for (int i = 0; i < 12; i++)
+    {
+        if (strcmp(options[i],option)==0)
+        {
+            return i;
+        }
+        
+    }
+    return -1;   
+}
