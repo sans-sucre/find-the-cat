@@ -47,17 +47,23 @@ void ajouter(Liste* liste, char* chemin_fichier){
 void afficherListe(Liste *liste){
     assert(liste!=NULL);
     Element* current = liste->premier;
-    if (current==NULL)
-    {
-        printf("Premier élément nul\n");
-    }
+
     printf("[");
     while (current!= NULL){
         printf( "%s ", current->chemin_fichier);
         current = current->next;
     }
     printf("]\n");
+}
 
+void afficher_chemins_liste(Liste* liste){
+    assert(liste!=NULL);
+    Element* current = liste->premier;
+
+    while (current!= NULL){
+        printf( "%s\n", current->chemin_fichier);
+        current = current->next;
+    }
 }
 
 void supprimerListe(Liste* liste){

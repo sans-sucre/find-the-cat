@@ -144,13 +144,19 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
         if( (strcmp(nom,".")!=0) & (strcmp(nom,"..")!=0) & (nom[0]!='.') ){//on prend pas en compte le dossier courant, le dossier précédent ou les dossiers/fichiers cachés
 
             getChemin(chemin,nom,cheminP); //chemin de ce que j'analyse (je ne suis pas encore "dessus", je l'analyse depuis "chemin" = dossier)
-            printf("\nFichier/dossier analysé : %s\n",cheminP);
+            //printf("\nFichier/dossier analysé : %s\n",cheminP);
 
             bool status = true;
             int j = 0;
             
             while (options_demandees[j] != NULL){ //pour chaque option demandée
-                printf("Option demandée %d : %s\n",j,options_demandees[j]);
+                //printf("Option demandée %d : %s\n",j,options_demandees[j]);
+
+                if (strcmp(options_demandees[j],"-test") == 0){ //si c'est le test
+                    printf("La valeur du flag -%s est %s.",options_demandees[j+1],parametres[j+1]);
+                    closedir(entree);
+                    return initialisationListe();
+                }
 
                 if (strcmp(options_demandees[j],"-dir") != 0){ //si ce n'est pas une option sur les dossiers
 
@@ -159,9 +165,9 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
                         for (int i = 0 ; i < taille ; i++){ //parcours tableau des options connues/demandables
                             
                             if (strcmp(options_demandees[j],options[i]) == 0){ //on trouve l'indice de la fonction demandée
-                                printf("Option reconnue %d : %s\n",i,options[i]);
+                                //printf("Option reconnue %d : %s\n",i,options[i]);
                                 if (!commande_a_exec(i,parametres[j],courant)){    //on l'exécute avec son paramètre et on voit si le fichier correspond
-                                    printf("Condition non respectée\n");
+                                    //printf("Condition non respectée\n");
                                     status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
                                 }
                                 break; //pas besoin de regarder les autres options connues, on a déjà trouvé la bonne  
@@ -208,60 +214,8 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
     closedir(entree);
     return liste;
 }
-/* Avant changement
-        if(etatContinue(courant) ){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
-
-            getChemin(chemin,nom,cheminP);
-
-            if (estFichier(courant)){ //si c'est un fichier
-
-                bool status = true;
-                
-                for (int j = 0 ; j < taille ; j++){ //pour chaque option demandée
-                    printf("Option demandée %d : %s\n",j,options_demandees[j]);
-                   
-                    if (options_demandees[j] == "-dir"){ //si c'est une option sur les dossiers
-                        break;
-                    }
-
-                    for (int i = 0 ; i < taille ; i++){ //parcours tableau des options connues/demandables
-                        printf("Option connue %d : %s\n",i,options[i]);
-                        
-                        if (strcmp(options_demandees[j],options[i]) == 0){ //on trouve l'indice de la fonction demandée
-                            
-                            printf("Booléen : %d\n",commande_a_exec(i,parametres[j],courant));
-
-                            if (!commande_a_exec(i,parametres[j],courant)){    //on l'exécute avec son paramètre et on voit si le fichier correspond
-                                status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
-                                break;
-                            }  
-                        }
-                    }
-                    if (!status){
-                        break;
-                    }
-                    
-                }
-                if (status){
-                    ajouter(liste,cheminP); //le fichier valide toutes les conditions
-                    printf("%s\n",cheminP); //on print le chemin du fichier
-                }
-            }
-            //fichier ou dossier
-            liste = parcourir_choisir(cheminP,options_demandees,parametres,liste);    
-        } 
-    }
-*/
-
 
 //fonctions qui correspondent aux commandes (bien si c'est du même nom)
-
-
-
-void test(){
-    printf("Fonction test\n");
-    return;
-}
 
 bool name(char* parametre, struct dirent* fichier){
 
@@ -415,8 +369,10 @@ bool ctc(char* parametre, struct dirent* fichier){
 bool dir(char* parametre, struct dirent* dossier){
 
     char* nom = dossier->d_name; //nom du dossier
-    printf("Nom dossier : %s\n",nom);
-    printf("Nom dossier recherché : %s\n",parametre);
+
+    if (parametre == NULL){ //si -dir sans option, on affiche tous les dossiers
+        return true;
+    }
 
     if (strcmp(nom,parametre) == 0){ //si le nom est correct
         return true;
@@ -428,10 +384,6 @@ bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier)
 
     switch (indice_commande)
     {
-    case 0:
-        test();
-        return false;
-    
     case 1:
         return name(parametre,fichier);
 
@@ -482,4 +434,10 @@ bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui pas
         exit(EXIT_FAILURE);
     }
     
+}
+
+void bonne_sortie(char* chemin, char** options_demandees, char** parametres, Liste* liste){
+    Liste* liste_finale = parcourir_choisir(chemin,options_demandees,parametres,liste);
+    afficher_chemins_liste(liste_finale);
+    supprimerListe(liste_finale);
 }

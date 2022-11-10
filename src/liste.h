@@ -27,5 +27,7 @@ void ajouter(Liste* liste, char* chemin_fichier);
 
 void afficherListe(Liste *liste);
 
+void afficher_chemins_liste(Liste *liste);
+
 void supprimerListe(Liste* liste);
 #endif //__LISTE__

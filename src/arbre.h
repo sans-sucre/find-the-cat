@@ -32,8 +32,6 @@ void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin se
 
 bool commande_a_exec(int indice_commande, char* parametre, struct dirent* fichier);
 
-void test();
-
 bool name(char* parametre, struct dirent* fichier);
 
 void size(char* parametre,char* chemin);
@@ -52,7 +50,7 @@ bool dir(char* parametre, struct dirent* dossier);
 
 bool check_regex(char* parametre, char* nom);
 
-
+void bonne_sortie(char* chemin, char** options_demandees, char** parametres, Liste* liste);
 
 
 

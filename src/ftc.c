@@ -86,54 +86,33 @@ int main(int argc, char const *argv[]){
     char* starting_point;
     char* options[100*sizeof(char*)];//buffer problème
     char* parametres[100*sizeof(char*)];// buffer problème
-    int i = 1;
 
-    while (argv[i] != NULL){ //est-ce que y'a un caractère \n à la fin ? pk parfois je vois une autre option demandée avec des caractères chelous alors que je n'en ai pas mise ?
-
+    for(int i = 1 ; i < argc ; i++){ //est-ce que y'a un caractère \n à la fin ? pk parfois je vois une autre option demandée avec des caractères chelous alors que je n'en ai pas mise ?
+        //changer, marche pas bien (trous, pas d'option 1 mais 0 et 2 quand on met deux options et deux paramtres...)
         switch (i){
             case 1:
                 starting_point = argv[1]; // d'où on commence la recherche
-                printf("Départ : %s\n",starting_point);
-                break;
-
-            case 2:
-                options[i-2] = argv[i];
-                printf("Option %d : %s\n",i-2,argv[i]);
-                break;
-
-            case 3:
-                parametres[i-3] = argv[i];   
-                printf("Paramètre %d : %s\n",i-3,argv[i]);
                 break;
 
             default:
                 if ( (argv[i][0] == '-') & (!isdigit(argv[i][1])) ){ //si c'est bien une option et pas un paramètre comme -9k
-                    options[i-3] = argv[i];   
-                    printf("Option %d : %s\n",i-3,argv[i]);
+                    options[i-2] = argv[i];
                     break;
                 }
                 
                 else{
                     parametres[i-3] = argv[i];
-                    parametres[i-3][strcspn(parametres[i-3], "\n")] = 0;   
-                    printf("Paramètre %d : %s\n",i-3,argv[i]);
+                    parametres[i-3][strcspn(parametres[i-3], "\n")] = 0;
                     break;
                 }
         }
-    i++;
     }
 
     Liste* liste_finale = parcourir_choisir(starting_point,options,parametres,initialisationListe());
-    //Liste* liste_finale=initialisationListe();
-    //ajouter(liste_finale,"00.txt");
-    afficherListe(liste_finale);
+    afficher_chemins_liste(liste_finale);
     supprimerListe(liste_finale);
-    
-    //parcourirDossier(starting_point);
-/*
-    commande_a_exec(commande,parametre);    //on exécute la command demandée avec le parametre donné
-    //si le paramètre n'est pas correct, ce sera dans la fonction qu'il sera analysé et jugé mauvais
-
+    //bonne_sortie(starting_point,options,parametres,initialisationListe()); //une seule fonction qui gère la sortie, comme ça plus simple de modifier
+    /*
     //date("-1h",chemin);
     //check_regex("a*","arbr.h");
     */
