@@ -52,18 +52,7 @@ bool check_regex(char* parametre, char* nom);
 
 void bonne_sortie(char* chemin, char** options_demandees, char** parametres, Liste* liste);
 
-
-
-
-
-
-
-
-
-
-
-
-
+int give_id(char* option);//donner la valeur d'un flag, si c'est pas une option, alors -1
 
 
 

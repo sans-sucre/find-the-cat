@@ -440,4 +440,23 @@ void bonne_sortie(char* chemin, char** options_demandees, char** parametres, Lis
     Liste* liste_finale = parcourir_choisir(chemin,options_demandees,parametres,liste);
     afficher_chemins_liste(liste_finale);
     supprimerListe(liste_finale);
+
+}
+
+int give_id(char* option){
+    char* options[12]={"-test","-name","-size","-date","-mime","-ctc","-dir","-color","-perm","-link","-threads","-ou"};
+    for (int i = 0; i < 12; i++)
+    {
+        if (strcmp(options[i],option)==0)
+        {
+            return i;
+        }
+        
+    }
+    
+    if (option[0] == '-'){ //une option inconnue ou un paramètre avec moins
+        return -1;
+    }
+    
+    return -2; //forcément un paramètre
 }

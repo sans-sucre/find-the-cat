@@ -21,6 +21,18 @@ typedef struct Liste{
     Element* premier;
 }Liste;
 
+typedef struct _cellule_
+{
+    int option;
+    char* param;
+    struct cellule* next;
+}cellule;
+
+typedef struct _option_liste_
+{
+    cellule* premier;
+}option_liste;
+
 Liste* initialisationListe();
 
 void ajouter(Liste* liste, char* chemin_fichier);
@@ -30,4 +42,16 @@ void afficherListe(Liste *liste);
 void afficher_chemins_liste(Liste *liste);
 
 void supprimerListe(Liste* liste);
+
+//option liste :
+option_liste* createOptionListe();
+
+void ajouteOption(option_liste* liste, int option,char* param);
+
+void show_option_list(option_liste* liste);
+
+void supprime(option_liste* liste);
+
+
+
 #endif //__LISTE__

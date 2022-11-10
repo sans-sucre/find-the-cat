@@ -1,97 +1,109 @@
 #include <stdio.h>
+#include <string.h>
 #include "arbre.h"
 #include "liste.h"
 
 
 int main(int argc, char const *argv[]){
     
-    //printf("Hello world!\n");
-    //char* chemin = ".";//la racine de dossier, donné par question1
+    option_liste* option_demandees = createOptionListe();
+    char* starting_point = argv[1];
+    int i = 2; //commence à 2 car 0 = ./ftc et 1 = starting_point
 
-    //char* parametres[7]; //mettre les options de chaque commande à l'indice i qui correspond bien à la commande i dans la liste commandes
-    //plutôt faire une dictionnaire => pas de structure dictionnaire mais table de hashage... avec à chaque alvéole la liste simplement chaînée des options
-    //on utilise commande pour trouver les options dans le dico, si la commande != clé du dico, commande pas reconnue
-    //=> pas besoin car options possibles trop grandes pour dates et tailles => analyser le paramètre dans la fonction, si c'est sous une forme qui marche, ok
-    //ou sinon on met dans paramètres que les options qui sont uniques ou dénombrables, genre d m y pour dates mais pas chaque nb et + ou -
+    while (argv[i]!=NULL) // pour détecter la fin de la ligne de commande
+    {   
+
+        int indice = give_id(argv[i]);
+
+        if (indice >=0)
+        {
+            printf("indice %d\n",indice);
+            printf("argv i+1 %s\n",argv[i+1]);
+            printf("give_id(argv[i+1] = %d\n",give_id(argv[i+1]));
+
+            if (argv[i+1] != NULL){
+                if (give_id(argv[i+1])==-2 | (give_id(argv[i+1]) == -1) & (isdigit(argv[i+1][1])) ){ //si le suivant est un paramètre
+                    ajouteOption(option_demandees,indice,argv[i+1]);
+                    afficherListe(option_demandees);
+                    i++; //on saute le paramètre
+                }
+            }
+            
+            else{ //on ajoute l'option sans paramètre
+                ajouteOption(option_demandees,indice,NULL);
+            }
+        }
+        
+        else{
+            printf("Option %s inconnue.\n",argv[i]);
+            printf("La ligne de commande doit être écrite sous la forme :\n./ftc starting-point -option paramètre\n ");
+            supprime(option_demandees);
+            return(EXIT_FAILURE);
+        }
+
+        i++;
+    }
+    
+    if (option_demandees->premier == NULL){
+        printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n./ftc starting-point -option paramètre\n ");
+    }
+    
+    show_option_list(option_demandees);
+    supprime(option_demandees);
 
     /*
-    ////////////////AJOUT DANS LISTE DES COMMANDES DEMANDEES SI ELLES SONT VALIDES (et ajout du paramètre dans la liste des paramètres)
-    char* commandes[]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
+    int départ = 0;
+    int fin = 0;
+    for (int i = 1; i < fin; i++)
+    {   
+        int indice = give_value(argv[i]);
+        if (indice >= 0)
+        {
+            printf("indice %d\n",indice);
+            if (give_value(argv[i+1])==-1)
+            {
+                ajouteOption(optionListe,indice,argv[i+1]);
+            }
+            else{
+                ajouteOption(optionListe,indice,NULL);
+            }
 
-    //la taille du tableau peut changer donc on la met dans une variable plutôt qu'en dur 
-    long int taille = sizeof(commandes)/sizeof(commandes[0]);
-
-    char* options[taille];
-    char* parametres[taille];
-    int i = 1;
-    while (argv[i] != NULL){
-        switch (i){
-            case 1:
-                char* starting_point = argv[1]; // d'où on commence la recherche
-                printf("Départ : %s\n",starting_point);
-                break;
-
-            case 2:
-                bool trouvee = false;
-
-                for (int j = 0 ; j < taille ; j++){
-                    if (strcmp(argv[i],commandes[j]) == 0){ //l'option demandée est valide
-                        trouvee = true;
-                        options[i-2] = argv[i];
-                        printf("Option %d : %s\n",i-2,argv[i]);
-                        break;
-                    }
-                }
-
-                if (!trouvee){
-                    printf("Option %s non reconnue.\n",argv[i]);
-                }
-                break;
-
-            case 3:
-                parametres[i-3] = argv[i];   
-                printf("Paramètre %d : %s\n",i-3,argv[i]);
-                break;
-
-            default:
-                if (argv[i][0] == '-' & !isdigit(argv[i][1])){ //si c'est bien une option et pas un paramètre comme -9k
-                    
-                    bool trouvee = false;
-
-                    for (int j = 0 ; j < taille ; j++){
-                        if (strcmp(argv[i],commandes[j]) == 0){ //l'option demandée est valide
-                            trouvee = true;
-                            options[i-3] = argv[i];   
-                            printf("Option %d : %s\n",i-3,argv[i]);
-                            break;
-                        }
-                    }
-
-                    if (!trouvee){
-                    printf("Option non reconnue.\n",argv[i]);
-                    }
-                    break;
-                }
-                
-                else{
-                    parametres[i-3] = argv[i];   
-                    printf("Paramètre %d : %s\n",i-3,argv[i]);
-                    break;
-                }
         }
+        else if ( (argv[i][0] == '-') & (!isdigit(argv[i][1])) &(give_value(argv[i])<0)) 
+        {
+            printf("Option %s inconnue\n",argv[i]);
+            printf("La ligne de commande doit être écrit sous forme :\n \t\tftc starting-point [-option [paramètre]]\n ");
+            supprime(optionListe);
+            return(EXIT_FAILURE);
+        }    
+         
     }
     */
+    
+    /*
+    char* starting_point=argv[2];
+    char* options[100*sizeof(char*)];
+    char* parametres[100*sizeof(char*)];
+    int i = 1;
 
-   ////////////////AJOUT DANS LISTE DES COMMANDES DEMANDEES (et ajout du paramètre dans la liste des paramètres)
-    char* starting_point;
-    char* options[100*sizeof(char*)];//buffer problème
-    char* parametres[100*sizeof(char*)];// buffer problème
+    while (argv[i] != NULL){ 
 
     for(int i = 1 ; i < argc ; i++){ //est-ce que y'a un caractère \n à la fin ? pk parfois je vois une autre option demandée avec des caractères chelous alors que je n'en ai pas mise ?
         //changer, marche pas bien (trous, pas d'option 1 mais 0 et 2 quand on met deux options et deux paramtres...)
         switch (i){
             case 1:
-                starting_point = argv[1]; // d'où on commence la recherche
+                starting_point = argv[2]; // d'où on commence la recherche
+                printf("Départ : %s\n",starting_point);
+                break;
+
+            case 2:
+                options[i-2] = argv[i];
+                printf("Option %d : %s\n",i-2,argv[i]);
+                break;
+
+            case 3:
+                parametres[i-3] = argv[i];   
+                printf("Paramètre %d : %s\n",i-3,argv[i]);
                 break;
 
             default:
@@ -113,6 +125,7 @@ int main(int argc, char const *argv[]){
     supprimerListe(liste_finale);
     //bonne_sortie(starting_point,options,parametres,initialisationListe()); //une seule fonction qui gère la sortie, comme ça plus simple de modifier
     /*
+
     //date("-1h",chemin);
     //check_regex("a*","arbr.h");
     */
