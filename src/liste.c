@@ -93,7 +93,7 @@ option_liste* createOptionListe(){
     return liste;
 }
 
-void ajouteOption(option_liste* liste,int option,char* param){
+void ajouteOption(option_liste* liste,char* nom_option,int option,char* param){
     //printf("ok ici91\n");
 
     assert(liste!=NULL);
@@ -103,6 +103,8 @@ void ajouteOption(option_liste* liste,int option,char* param){
     }
 
     nouveau->option = option;
+    nouveau->nom_option = malloc(sizeof(char)*strlen(nom_option)+1); //faut malloc et faire strcpy sinon quand le pointeur chemin_fichier pointera sur autre chose, la valeur changera aussi
+    strcpy(nouveau->nom_option,nom_option);
 
     if (param != NULL){ 
         nouveau->param = malloc(sizeof(char) * (strlen(param)+1) ); //faut malloc et faire strcpy sinon quand le pointeur chemin_fichier pointera sur autre chose, la valeur changera aussi
@@ -125,8 +127,6 @@ void ajouteOption(option_liste* liste,int option,char* param){
         //printf("ok ici2\n");
         current->next = nouveau;
     }
-    printf("Dans ajouterOption : ");
-    show_option_list(liste);
 }
 
 void show_option_list(option_liste* liste){
@@ -135,7 +135,7 @@ void show_option_list(option_liste* liste){
     
     printf("[");
     while (current!= NULL){
-        printf( "option : %d ", current->option);
+        printf( "option : %s ", current->nom_option);
         printf( "param : %s ", current->param);
         current = current->next;
     }
@@ -150,9 +150,11 @@ void supprime(option_liste* liste){
             cellule* aSupprimer = liste->premier;
             liste->premier = aSupprimer->next;
             free(aSupprimer->param);
+            free(aSupprimer->nom_option);
             free(aSupprimer);
         }
         free(liste->premier->param);
+        free(liste->premier->nom_option);
         free(liste->premier);
     }
     free(liste);

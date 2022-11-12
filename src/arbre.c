@@ -122,15 +122,8 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
 }
 
 
-Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametres, Liste* liste){
+Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste){
     //////////////////PARCOURS DE L'ARBORESCENCE
-
-    char* options[100*sizeof(char*)]={"-test","-name","-size","-date","-mime","-ctc","-dir"};
-
-    //la taille du tableau
-    //long int taille = sizeof(options)/sizeof(options[0]);
-
-    int taille = 7;
 
     //initialisation, on ouvre le dossier en fonction du chemin donné
     DIR* entree = opendir(chemin);
@@ -148,55 +141,48 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
 
             bool status = true;
             int j = 0;
+            cellule* current_option = options_demandees->premier;
             
-            while (options_demandees[j] != NULL){ //pour chaque option demandée
+            while (current_option != NULL){ //pour chaque option demandée
                 //printf("Option demandée %d : %s\n",j,options_demandees[j]);
 
-                if (strcmp(options_demandees[j],"-test") == 0){ //si c'est le test
-                    printf("La valeur du flag -%s est %s.",options_demandees[j+1],parametres[j+1]);
+                if (current_option->option == 0){ //si c'est le test
+                    cellule* suivant = current_option->next;
+                    printf("La valeur du flag %s est %s\n.",suivant->nom_option,suivant->param);
                     closedir(entree);
-                    return initialisationListe();
+                    return liste;
                 }
 
-                if (strcmp(options_demandees[j],"-dir") != 0){ //si ce n'est pas une option sur les dossiers
+                if (current_option->option != 6){ //si ce n'est pas -dir, une option sur les dossiers
 
-                    if (estFichier(courant)){ //si c'est un fichier
-                        
-                        for (int i = 0 ; i < taille ; i++){ //parcours tableau des options connues/demandables
-                            
-                            if (strcmp(options_demandees[j],options[i]) == 0){ //on trouve l'indice de la fonction demandée
-                                //printf("Option reconnue %d : %s\n",i,options[i]);
-                                if (!commande_a_exec(i,parametres[j],courant)){    //on l'exécute avec son paramètre et on voit si le fichier correspond
-                                    //printf("Condition non respectée\n");
-                                    status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
-                                }
-                                break; //pas besoin de regarder les autres options connues, on a déjà trouvé la bonne  
-                            }
-                        }
-
-                        if (!status){ //au moins une condition non rencontrée
+                    if (estFichier(courant)){ //si c'est un fichier        
+                        if (!commande_a_exec(current_option->option,current_option->param,courant)){  //on exécute l'option avec son paramètre et on voit si le fichier correspond
+                            //printf("Condition non respectée\n");
+                            status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
                             break;  //pas besoin de regarder les autres options demandées
                         }
                     }
 
                     else{ //option != -dir (forcément option sur fichiers) et c'est pas un fichier
                         status = false; //ne peut pas être valable
-                        break;
+                        break; //pas besoin de regarder les autres options demandées
                     }
                 }
                 
                 else{ //option -dir aka sur les dossiers
                     if (etatContinue(courant)){ //si c'est un dossier
-                        if (!commande_a_exec(6,parametres[j],courant)){    //on exécute dir avec son paramètre et on voit si le fichier correspond
+                        if (!commande_a_exec(6,current_option->param,courant)){    //on exécute dir avec son paramètre et on voit si le fichier correspond
                             status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
+                            //!!!!!!!!!!!!!!!!!! si on met pas de break ça va normalement car si on a -dir, l'option sera seule, SINON le rajouter ici
                         }  
                     }
                     else{ //option -dir et c'est pas un dossier
                         status = false; //ne peut pas être valable
+                        //!!!!!!!!!!!!!!!!!! si on met pas de break ça va normalement car si on a -dir, l'option sera seule, SINON le rajouter ici
                     }
-                //!!!!!!!!!!!!!!!!!! si on met pas de break ça va normalement car si on a -dir, l'option sera seule, SINON le rajouter ici
                 }
-            j++;
+            
+            current_option = current_option->next;
             }
             //fin de l'analyse par rapport aux options demandées 
             
@@ -206,11 +192,11 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
             }
             
             if (etatContinue(courant)){ //si dossier
-                liste = parcourir_choisir(cheminP,options_demandees,parametres,liste);  //j'analyse les fichiers/dossiers de ce dossier
-            }
-            
+                liste = parcourir_choisir(cheminP,options_demandees,liste);  //j'analyse les fichiers/dossiers de ce dossier
+            }    
         }
     }
+    //fin du parcours de l'arborescence
     closedir(entree);
     return liste;
 }
@@ -436,8 +422,8 @@ bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui pas
     
 }
 
-void bonne_sortie(char* chemin, char** options_demandees, char** parametres, Liste* liste){
-    Liste* liste_finale = parcourir_choisir(chemin,options_demandees,parametres,liste);
+void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste){
+    Liste* liste_finale = parcourir_choisir(chemin,options_demandees,liste);
     afficher_chemins_liste(liste_finale);
     supprimerListe(liste_finale);
 

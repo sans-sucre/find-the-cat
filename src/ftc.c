@@ -6,9 +6,10 @@
 
 int main(int argc, char const *argv[]){
     
-    option_liste* option_demandees = createOptionListe();
+    option_liste* options_demandees = createOptionListe();
     char* starting_point = argv[1];
     int i = 2; //commence à 2 car 0 = ./ftc et 1 = starting_point
+    //char* options[12]={"-test","-name","-size","-date","-mime","-ctc","-dir","-color","-perm","-link","-threads","-ou"};
 
     while (argv[i]!=NULL) // pour détecter la fin de la ligne de commande
     {   
@@ -16,47 +17,45 @@ int main(int argc, char const *argv[]){
 
         if (indice >=0)
         {
-            printf("indice %d\n",indice);
-            printf("argv i+1 %s\n",argv[i+1]);
-            printf("give_id(argv[i+1] = %d\n",give_id(argv[i+1]));
+            //printf("indice %d\n",indice);
+            //printf("argv i+1 %s\n",argv[i+1]);
+            //printf("give_id(argv[i+1] = %d\n",give_id(argv[i+1]));
 
             if (argv[i+1] != NULL){
                 if (give_id(argv[i+1])==-2 | (give_id(argv[i+1]) == -1) & (isdigit(argv[i+1][1])) ){ //si le suivant est un paramètre
-                    printf("Avec parametres");
-                    ajouteOption(option_demandees,indice,argv[i+1]);
-                    show_option_list(option_demandees);
+                    ajouteOption(options_demandees,argv[i],indice,argv[i+1]);
                     i++; //on saute le paramètre
                 }
                 else{
-                    ajouteOption(option_demandees,indice,NULL);
-                    printf("Sans paramètre");
-                    show_option_list(option_demandees);
+                    ajouteOption(options_demandees,argv[i],indice,NULL);
                 }
             }
             
             else{ //on ajoute l'option sans paramètre
-                ajouteOption(option_demandees,indice,NULL);
-                printf("Sans paramètre");
-                show_option_list(option_demandees);
+                ajouteOption(options_demandees,argv[i],indice,NULL);
             }
         }
         
         else{
             printf("Option %s inconnue.\n",argv[i]);
             printf("La ligne de commande doit être écrite sous la forme :\n./ftc starting-point -option paramètre\n ");
-            supprime(option_demandees);
+            supprime(options_demandees);
             return(EXIT_FAILURE);
         }
 
         i++;
     }
     
-    if (option_demandees->premier == NULL){
+    if (options_demandees->premier == NULL){
         printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n./ftc starting-point -option paramètre\n ");
     }
     
-    show_option_list(option_demandees);
-    supprime(option_demandees);
+    //show_option_list(option_demandees);
+    Liste* liste_finale = parcourir_choisir(starting_point,options_demandees,initialisationListe());
+    afficher_chemins_liste(liste_finale);
+    
+    supprimerListe(liste_finale);
+    supprime(options_demandees);
 
     /*
     int départ = 0;
