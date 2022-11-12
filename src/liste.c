@@ -125,6 +125,8 @@ void ajouteOption(option_liste* liste,int option,char* param){
         //printf("ok ici2\n");
         current->next = nouveau;
     }
+    printf("Dans ajouterOption : ");
+    show_option_list(liste);
 }
 
 void show_option_list(option_liste* liste){

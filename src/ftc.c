@@ -12,7 +12,6 @@ int main(int argc, char const *argv[]){
 
     while (argv[i]!=NULL) // pour détecter la fin de la ligne de commande
     {   
-
         int indice = give_id(argv[i]);
 
         if (indice >=0)
@@ -23,14 +22,22 @@ int main(int argc, char const *argv[]){
 
             if (argv[i+1] != NULL){
                 if (give_id(argv[i+1])==-2 | (give_id(argv[i+1]) == -1) & (isdigit(argv[i+1][1])) ){ //si le suivant est un paramètre
+                    printf("Avec parametres");
                     ajouteOption(option_demandees,indice,argv[i+1]);
-                    afficherListe(option_demandees);
+                    show_option_list(option_demandees);
                     i++; //on saute le paramètre
+                }
+                else{
+                    ajouteOption(option_demandees,indice,NULL);
+                    printf("Sans paramètre");
+                    show_option_list(option_demandees);
                 }
             }
             
             else{ //on ajoute l'option sans paramètre
                 ajouteOption(option_demandees,indice,NULL);
+                printf("Sans paramètre");
+                show_option_list(option_demandees);
             }
         }
         
