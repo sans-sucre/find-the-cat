@@ -47,17 +47,23 @@ void ajouter(Liste* liste, char* chemin_fichier){
 void afficherListe(Liste *liste){
     assert(liste!=NULL);
     Element* current = liste->premier;
-    if (current==NULL)
-    {
-        printf("Premier élément nul\n");
-    }
+
     printf("[");
     while (current!= NULL){
         printf( "%s ", current->chemin_fichier);
         current = current->next;
     }
     printf("]\n");
+}
 
+void afficher_chemins_liste(Liste* liste){
+    assert(liste!=NULL);
+    Element* current = liste->premier;
+
+    while (current!= NULL){
+        printf( "%s\n", current->chemin_fichier);
+        current = current->next;
+    }
 }
 
 void supprimerListe(Liste* liste){
@@ -87,21 +93,25 @@ option_liste* createOptionListe(){
     return liste;
 }
 
-void ajouteOption(option_liste* liste,int option,char* param){
+void ajouteOption(option_liste* liste,char* nom_option,int option,char* param){
     //printf("ok ici91\n");
 
     assert(liste!=NULL);
     cellule* nouveau = calloc(1,sizeof(cellule));
-    
-    //faut malloc et faire strcpy sinon quand le pointeur chemin_fichier pointera sur autre chose, la valeur changera aussi
-    nouveau->option = option;
-    nouveau->parem =param; 
-    
-    nouveau->next=NULL;
-
     if (nouveau==NULL){
         perror("Erreur d'allocation mémoire !");
     }
+
+    nouveau->option = option;
+    nouveau->nom_option = malloc(sizeof(char)*strlen(nom_option)+1); //faut malloc et faire strcpy sinon quand le pointeur chemin_fichier pointera sur autre chose, la valeur changera aussi
+    strcpy(nouveau->nom_option,nom_option);
+
+    if (param != NULL){ 
+        nouveau->param = malloc(sizeof(char) * (strlen(param)+1) ); //faut malloc et faire strcpy sinon quand le pointeur chemin_fichier pointera sur autre chose, la valeur changera aussi
+        strcpy(nouveau->param,param);
+    }
+    
+    nouveau->next=NULL;
 
     cellule* current = liste->premier;
     if (current==NULL){
@@ -122,14 +132,11 @@ void ajouteOption(option_liste* liste,int option,char* param){
 void show_option_list(option_liste* liste){
     assert(liste!=NULL);
     cellule* current = liste->premier;
-    if (current==NULL)
-    {
-        printf("Premier élément nul\n");
-    }
+    
     printf("[");
     while (current!= NULL){
-        printf( "option : %d ", current->option);
-        printf( "param : %s ", current->parem);
+        printf( "option : %s ", current->nom_option);
+        printf( "param : %s ", current->param);
         current = current->next;
     }
     printf("]\n");
@@ -142,8 +149,12 @@ void supprime(option_liste* liste){
         while (liste->premier->next != NULL){ //tant que le suivant n'est pas nul
             cellule* aSupprimer = liste->premier;
             liste->premier = aSupprimer->next;
+            free(aSupprimer->param);
+            free(aSupprimer->nom_option);
             free(aSupprimer);
         }
+        free(liste->premier->param);
+        free(liste->premier->nom_option);
         free(liste->premier);
     }
     free(liste);

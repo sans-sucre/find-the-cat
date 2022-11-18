@@ -26,13 +26,11 @@ int timeToNumber(char* parametre);//transformer un paramètre de temps en un nom
 
 void parcourirDossier(char* chemin);
 
-Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametres, Liste* liste);
+Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste);
 
 void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin sera enregistré dans le paramettre enregistre
 
 bool commande_a_exec(int indice_commande, char* parametre, struct dirent* fichier);
-
-void test();
 
 bool name(char* parametre, struct dirent* fichier);
 
@@ -52,21 +50,9 @@ bool dir(char* parametre, struct dirent* dossier);
 
 bool check_regex(char* parametre, char* nom);
 
-int give_value(char* option);//donner la valeur d'un flag, si c'est pas une option, alors -1
+void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+int give_id(char* option);//donner la valeur d'un flag, si c'est pas une option, alors -1
 
 
 
