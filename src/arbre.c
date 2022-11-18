@@ -136,12 +136,12 @@ Liste* parcourir_choisir(char* chemin, char** options_demandees, char** parametr
     DIR* entree = opendir(chemin);
     struct dirent* courant = NULL;//structure après readdir
 
-    char cheminP[200];//place pour enregistrer le prochain chemin
+    char cheminP[2000];//place pour enregistrer le prochain chemin
     
     while ((courant = readdir(entree))!= NULL){    
         char* nom = courant->d_name; //nom du fichier ou dossier
 
-        if( (strcmp(nom,".")!=0) & (strcmp(nom,"..")!=0) & (nom[0]!='.') ){//on prend pas en compte le dossier courant, le dossier précédent ou les dossiers/fichiers cachés
+        if( etatContinue(entree) ){//on prend pas en compte le dossier courant, le dossier précédent ou les dossiers/fichiers cachés
 
             getChemin(chemin,nom,cheminP); //chemin de ce que j'analyse (je ne suis pas encore "dessus", je l'analyse depuis "chemin" = dossier)
             printf("\nFichier/dossier analysé : %s\n",cheminP);

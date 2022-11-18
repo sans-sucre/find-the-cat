@@ -5,6 +5,8 @@
 
 
 int main(int argc, char const *argv[]){
+    char* starting_point=argv[2];
+
     if (strcmp(argv[1],"ftc")!=0)
     {
         printf("La ligne de commande doit être écrit sous forme :\n \t\tftc starting-point [-option [paramètre]]\n ");
@@ -22,14 +24,14 @@ int main(int argc, char const *argv[]){
     {
         if (give_value(argv[i])>=0)
         {
-            int indice=give_value(argv[i]);
-            printf("indice %d\n",indice);
+            //int indice=give_value(argv[i]);
+           // printf("indice %d\n",indice);
             if (give_value(argv[i+1])==-1)
             {
-                ajouteOption(optionListe,indice,argv[i+1]);
+                ajouteOption(optionListe,give_value(argv[i]),argv[i+1]);
             }
             else{
-                ajouteOption(optionListe,indice,NULL);
+                ajouteOption(optionListe,give_value(argv[i]),NULL);
             }
 
         }
@@ -45,7 +47,6 @@ int main(int argc, char const *argv[]){
     show_option_list(optionListe);
     supprime(optionListe);
     /*
-    char* starting_point=argv[2];
     char* options[100*sizeof(char*)];
     char* parametres[100*sizeof(char*)];
     int i = 1;
