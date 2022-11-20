@@ -20,7 +20,7 @@ void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste);
 
 bool check_param(int indiceOption, char* param);
 
-bool test_option(option_liste* options_demandees);
+bool test_option(option_liste* options_demandees);// pour option -test 
 
 bool name(char* parametre, struct dirent* fichier);
 
