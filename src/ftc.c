@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]){
         printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n \t\t./ftc starting-point -option paramètre\n ");
     }
     test_option(options_demandees);
-    
+    Liste* Liste_finale=initialisationListe();
     //show_option_list(options_demandees);
     Liste* liste_finale = parcourir_choisir(starting_point,options_demandees,initialisationListe());
     afficher_chemins_liste(liste_finale);

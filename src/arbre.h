@@ -14,9 +14,6 @@
 #include <ctype.h> //pour isdigit()
 
 
-
-
-
 bool etatContinue(struct dirent* entree);//1 signifie que l'object est un dossier et on peut y aller
 
 bool estFichier(struct dirent* entree);
@@ -31,7 +28,7 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
 
 void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin sera enregistré dans le paramettre enregistre
 
-bool commande_a_exec(int indice_commande, char* parametre, struct dirent* fichier);
+bool commande_a_exec(int indice_commande, char* parametre, struct dirent* fichier,char* cheminP);
 
 void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste);
 

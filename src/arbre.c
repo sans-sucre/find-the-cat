@@ -126,17 +126,15 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
     //initialisation, on ouvre le dossier en fonction du chemin donné
     DIR* entree =NULL;
     if ((entree = opendir (chemin)) == NULL) {
-        //perror ("Cannot open .");
         exit (1);
     }
     struct dirent* courant = NULL;//structure après readdir
-
     char cheminP[200];//place pour enregistrer le prochain chemin
     
     while ((courant = readdir(entree))!= NULL){    
         char* nom = courant->d_name; //nom du fichier ou dossier
         //printf("nom : %s\n",nom);
-        if( etatContinue(courant) ){
+        if( (strcmp(nom,".")!=0) & (strcmp(nom,"..")!=0) & (nom[0]!='.')  ){
 
             getChemin(chemin,nom,cheminP); //chemin de ce que j'analyse (je ne suis pas encore "dessus", je l'analyse depuis "chemin" = dossier)
             //printf("\nFichier/dossier analysé : %s\n",cheminP);
@@ -145,13 +143,14 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
             cellule* current_option = options_demandees->premier;
             
             while (current_option != NULL){ //pour chaque option demandée
-               // printf("Option demandée %d : %s\n",j,options_demandees[j]);
+                printf("Option demandée %d : %s\n",j,current_option->nom_option);
 
                 if (current_option->option != 6){ //si ce n'est pas -dir, une option sur les dossiers
-
-                    if (estFichier(courant)){ //si c'est un fichier        
-                        if (!commande_a_exec(current_option->option,current_option->param,courant)){  //on exécute l'option avec son paramètre et on voit si le fichier correspond
-                            //printf("Condition non respectée\n");
+                    //printf("ok\n");
+                    if (estFichier(courant)){ //si c'est un fichier 
+                        //printf("ok\n");       
+                        if (!commande_a_exec(current_option->option,current_option->param,courant,cheminP)){  //on exécute l'option avec son paramètre et on voit si le fichier correspond
+                            printf("Condition non respectée\n");
                             status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
                             break;  //pas besoin de regarder les autres options demandées
                         }
@@ -165,7 +164,7 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
                 
                 else{ //option -dir aka sur les dossiers
                     if (etatContinue(courant)){ //si c'est un dossier
-                        if (!commande_a_exec(6,current_option->param,courant)){    //on exécute dir avec son paramètre et on voit si le fichier correspond
+                        if (!commande_a_exec(6,current_option->param,courant,cheminP)){    //on exécute dir avec son paramètre et on voit si le fichier correspond
                             status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
                             //!!!!!!!!!!!!!!!!!! si on met pas de break ça va normalement car si on a -dir, l'option sera seule, SINON le rajouter ici
                         }  
@@ -198,18 +197,18 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
 //fonctions qui correspondent aux commandes (bien si c'est du même nom)
 
 
-bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier){
-
+bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier,char* cheminP){
+    printf("chemin %s0\n",cheminP);
     switch (indice_commande)
     {
     case 1:
         return name(parametre,fichier);
 
     case 2:
-        return stateSize(parametre,"");// à modifier
+        return stateSize(parametre,cheminP);// à modifier
 
     case 3:
-        return stateDate(parametre,"");// à modifier
+        return stateDate(parametre,cheminP);// à modifier
 
     case 4:
         return mime(parametre,fichier);
