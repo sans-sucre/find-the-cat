@@ -1,11 +1,22 @@
 #include "check.h"
 bool name(char* parametre, struct dirent* fichier){
+    int tailleP=strlen(parametre)+4;
+    char param[tailleP];
+    strcpy(param,parametre);
 
     char* nom = fichier->d_name; //nom du fichier
+    int tailleN=strlen(nom)+4;
+    char name[tailleN];
+    strcpy(name,nom);
 
     if (strcmp(nom,parametre) == 0){ //si le nom est correct
         return true;
     }
+    if (check_regex(param,name))
+    {
+        return true;
+    }
+    
     return false;
 }
 
@@ -38,14 +49,14 @@ void size(char* parametre,char* chemin){
 bool stateSize(char* parametre, char* chemin){
     struct stat sb;
     if (stat(chemin,&sb)==-1){
-        perror("stat ERREUR");
+        //perror("stat ERREUR");
         exit(EXIT_FAILURE);
     } 
 
     if(parametre[0]=='+'){
         if ((long long)sb.st_size > sizeToNumber(parametre))
         {
-            printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
+            //printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
             return true;
         }    
     }
@@ -59,7 +70,7 @@ bool stateSize(char* parametre, char* chemin){
     }
     else
     {
-        perror("paramètre erreur, caractère dehors '+''-'\n");
+        //perror("paramètre erreur, caractère dehors '+''-'\n");
         exit(EXIT_FAILURE);
     }
     return false;
@@ -74,7 +85,7 @@ bool stateDate(char* parametre,char* chemin){
     //printf("diff%d\n",diff_time);
 
     if (stat(chemin,&sb)==-1){
-        perror("stat ERREUR");
+        //perror("stat ERREUR");
         exit(EXIT_FAILURE);
     } 
     
@@ -85,8 +96,8 @@ bool stateDate(char* parametre,char* chemin){
         
         if ( (int) difftime(now,temps)>diff_time_obj)
         {
-            printf("%d",(int) difftime(now,temps));
-            printf("chemin : %s dernier accès : %s s \n",chemin,ctime(&sb.st_atime));
+            //printf("%d",(int) difftime(now,temps));
+            //printf("chemin : %s dernier accès : %s s \n",chemin,ctime(&sb.st_atime));
             return true;
         }
         
@@ -96,16 +107,16 @@ bool stateDate(char* parametre,char* chemin){
         time_t temps=sb.st_atime;
         if ( (int) difftime(now,temps)<diff_time_obj)
         {
-            printf("%d",(int) difftime(now,temps));
+            //printf("%d",(int) difftime(now,temps));
 
-            printf("chemin : %s dernier accès : %s s \n",chemin,ctime(&sb.st_atime));
+            //printf("chemin : %s dernier accès : %s s \n",chemin,ctime(&sb.st_atime));
             return true;
         }
         
     }
     else
     {
-        perror("paramètre erreur, caractère dehors '+''-'\n");
+        //perror("paramètre erreur, caractère dehors '+''-'\n");
         exit(EXIT_FAILURE);
     }
     return false;
@@ -174,18 +185,18 @@ bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui pas
 
         if (match == 0)
         {
-            printf ("%s est un fichier valide\n", nom);
+            //printf ("%s est un fichier valide\n", nom);
             return true;
         }
         else if (match == REG_NOMATCH)
         {
-            printf ("%s n\'est pas un fichier valide\n", nom);
+            //printf ("%s n\'est pas un fichier valide\n", nom);
             return false;
         }
     }
     else
     {
-        perror("erreur de compilation de regex\n");
+        //perror("erreur de compilation de regex\n");
         exit(EXIT_FAILURE);
     }
     

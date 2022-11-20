@@ -143,19 +143,16 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
             cellule* current_option = options_demandees->premier;
             
             while (current_option != NULL){ //pour chaque option demandée
-                printf("Option demandée %d : %s\n",j,current_option->nom_option);
+                //printf("Option demandée %d : %s\n",j,current_option->nom_option);
 
                 if (current_option->option != 6){ //si ce n'est pas -dir, une option sur les dossiers
-                    //printf("ok\n");
-                    if (estFichier(courant)){ //si c'est un fichier 
-                        //printf("ok\n");       
+                    if (estFichier(courant)){ //si c'est un fichier   
                         if (!commande_a_exec(current_option->option,current_option->param,courant,cheminP)){  //on exécute l'option avec son paramètre et on voit si le fichier correspond
-                            printf("Condition non respectée\n");
+                            //printf("Condition non respectée\n");
                             status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
                             break;  //pas besoin de regarder les autres options demandées
                         }
                     }
-
                     else{ //option != -dir (forcément option sur fichiers) et c'est pas un fichier
                         status = false; //ne peut pas être valable
                         break; //pas besoin de regarder les autres options demandées
@@ -176,6 +173,7 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
                 }
             
             current_option = current_option->next;
+            ++j;
             }
             //fin de l'analyse par rapport aux options demandées 
             
@@ -198,17 +196,17 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
 
 
 bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier,char* cheminP){
-    printf("chemin %s0\n",cheminP);
+    //printf("chemin %s0\n",cheminP);
     switch (indice_commande)
     {
     case 1:
         return name(parametre,fichier);
 
     case 2:
-        return stateSize(parametre,cheminP);// à modifier
+        return stateSize(parametre,cheminP);
 
     case 3:
-        return stateDate(parametre,cheminP);// à modifier
+        return stateDate(parametre,cheminP);
 
     case 4:
         return mime(parametre,fichier);

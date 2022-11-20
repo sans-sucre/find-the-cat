@@ -57,6 +57,7 @@ int main(int argc, char const *argv[]){
     
     //supprimerListe(liste_finale);
     supprime(options_demandees);
+    //check_regex("a*","arbr.h");
 
     /*
     int départ = 0;
@@ -134,7 +135,7 @@ int main(int argc, char const *argv[]){
     /*
 
     //date("-1h",chemin);
-    //check_regex("a*","arbr.h");
+    check_regex("a*","arbr.h");
     */
    return 0;
 }
