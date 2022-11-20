@@ -236,7 +236,7 @@ bool test_option(option_liste* options_demandees){
         //   printf("option  %s, param :%s\n",suivant->nom_option,suivant->param);
         if (give_id(suivant->nom_option)>0)
         {
-            printf("La valeur du flag %s est %s.\n",suivant->nom_option,suivant->param);
+            printf("La valeur du flag %s est %s \n",suivant->nom_option,suivant->param);
         }
         else
         {
