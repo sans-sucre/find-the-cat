@@ -253,6 +253,8 @@ bool test_option(option_liste* options_demandees){
         {
             printf("Le flag %s n'est pas correct",suivant->nom_option);
         }
+        return true;
     }
+    return false;
 
 }

@@ -49,7 +49,13 @@ int main(int argc, char const *argv[]){
     if (options_demandees->premier == NULL){
         printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n \t\t./ftc starting-point -option paramètre\n ");
     }
-    test_option(options_demandees);
+    if (test_option(options_demandees))//s'il y a option -test 
+    {
+        supprime(options_demandees);
+        return 0;
+    }
+    
+    //test_option(options_demandees);
     Liste* Liste_finale=initialisationListe();
     //show_option_list(options_demandees);
     Liste* liste_finale = parcourir_choisir(starting_point,options_demandees,initialisationListe());
