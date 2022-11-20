@@ -5,61 +5,63 @@
 
 
 int main(int argc, char const *argv[]){
-    char* starting_point=argv[2];
+    char* starting_point=argv[1];
     
-    if (strcmp(argv[1],"ftc")!=0)
+    if (strcmp(argv[0],"./ftc")!=0)
     {
-        printf("La ligne de commande doit être écrit sous forme :\n \t\tftc starting-point [-option [paramètre]]\n ");
+        printf("La ligne de commande doit être écrit sous forme :\n \t\t./ftc starting-point [-option [paramètre]]\n ");
         return(EXIT_FAILURE);
     }
     option_liste* options_demandees = createOptionListe();
-    int i = 3; //commence à 2 car 0 = ./ftc et 1 = starting_point
+    int i = 2; //commence à 2 car 0 = ./ftc et 1 = starting_point
     //char* options[12]={"-test","-name","-size","-date","-mime","-ctc","-dir","-color","-perm","-link","-threads","-ou"};
 
     while (argv[i]!=NULL) // pour détecter la fin de la ligne de commande
     {   
         int indice = give_id(argv[i]);
 
-        if (indice >=0)
+        if (indice==0)
         {
-            //printf("indice %d\n",indice);
-            //printf("argv i+1 %s\n",argv[i+1]);
-            //printf("give_id(argv[i+1] = %d\n",give_id(argv[i+1]));
-
+            ajouteOption(options_demandees,argv[i],indice,NULL);
+            
+        }
+        else
+        {
             if (argv[i+1] != NULL){
-                if ( (give_id(argv[i+1]) == -1) & (isdigit(argv[i+1][1])) ){ //si le suivant est un paramètre
-                    ajouteOption(options_demandees,argv[i],indice,argv[i+1]);
-                    i++; //on saute le paramètre
-                }
-                else{
+                if (give_id(argv[i+1])>=0)//si le preochaine élément est une option
+                {
                     ajouteOption(options_demandees,argv[i],indice,NULL);
                 }
-            }
-            
+                else// sinon, c'est pas une option
+                {
+                    ajouteOption(options_demandees,argv[i],indice,argv[i+1]);
+                    i++;
+                    //show_option_list(options_demandees);
+                }
+                }
             else{ //on ajoute l'option sans paramètre
                 ajouteOption(options_demandees,argv[i],indice,NULL);
             }
         }
         
-        else{
-            printf("Option %s inconnue.\n",argv[i]);
-            printf("La ligne de commande doit être écrite sous la forme :\n./ftc starting-point -option paramètre\n ");
-            supprime(options_demandees);
-            return(EXIT_FAILURE);
-        }
+        //printf("indice %d\n",indice);
+        //printf("argv i+1 %s\n",argv[i+1]);
+        //printf("give_id(argv[i+1] = %d\n",give_id(argv[i+1])<0);
+        
+        //printf("ok");
 
         i++;
     }
     
     if (options_demandees->premier == NULL){
-        printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n./ftc starting-point -option paramètre\n ");
+        printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n \t\t./ftc starting-point -option paramètre\n ");
     }
     
-    //show_option_list(option_demandees);
+    //show_option_list(options_demandees);
     Liste* liste_finale = parcourir_choisir(starting_point,options_demandees,initialisationListe());
     afficher_chemins_liste(liste_finale);
     
-    supprimerListe(liste_finale);
+    //supprimerListe(liste_finale);
     supprime(options_demandees);
 
     /*

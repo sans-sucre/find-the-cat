@@ -45,8 +45,8 @@ int sizeToNumber(char* parametre){
         number=number*1024*1024*1024;
         break;
     default:
-        perror("parametre error");
-        break;
+        //perror("parametre error");
+        return -1;
     }
     return number;
 }
@@ -66,8 +66,8 @@ int timeToNumber(char* parametre){
         number=number*60*60*24;//transformer en unité seconde
         break;
     default:
-        perror("parametre error");
-        break;
+        //perror("parametre error");
+        return -1;
     }
     return number;
 }
@@ -123,18 +123,17 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
 
 
 Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste){
-    //////////////////PARCOURS DE L'ARBORESCENCE
 
     //initialisation, on ouvre le dossier en fonction du chemin donné
     DIR* entree = opendir(chemin);
     struct dirent* courant = NULL;//structure après readdir
 
-    char cheminP[2000];//place pour enregistrer le prochain chemin
+    char cheminP[200];//place pour enregistrer le prochain chemin
     
     while ((courant = readdir(entree))!= NULL){    
         char* nom = courant->d_name; //nom du fichier ou dossier
-
-        if( etatContinue(entree) ){//on prend pas en compte le dossier courant, le dossier précédent ou les dossiers/fichiers cachés
+        //printf("nom : %s\n",nom);
+        if( etatContinue(courant) ){
 
             getChemin(chemin,nom,cheminP); //chemin de ce que j'analyse (je ne suis pas encore "dessus", je l'analyse depuis "chemin" = dossier)
             //printf("\nFichier/dossier analysé : %s\n",cheminP);
@@ -143,13 +142,21 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
             cellule* current_option = options_demandees->premier;
             
             while (current_option != NULL){ //pour chaque option demandée
-                //printf("Option demandée %d : %s\n",j,options_demandees[j]);
+               // printf("Option demandée %d : %s\n",j,options_demandees[j]);
 
                 if (current_option->option == 0){ //si c'est le test
                     cellule* suivant = current_option->next;
-                    printf("La valeur du flag %s est %s\n.",suivant->nom_option,suivant->param);
+                 //   printf("option  %s, param :%s\n",suivant->nom_option,suivant->param);
+                    if (give_id(suivant->nom_option)>0)
+                    {
+                        printf("La valeur du flag %s est %s.\n",suivant->nom_option,suivant->param);
+                    }
+                    else
+                    {
+                        printf("Le flag %s n'est pas correct\n",suivant->nom_option);
+                    }
                     closedir(entree);
-                    return liste;//?
+                    return liste;
                 }
 
                 if (current_option->option != 6){ //si ce n'est pas -dir, une option sur les dossiers
@@ -294,7 +301,7 @@ bool stateDate(char* parametre,char* chemin){
         }
         
     }
-    else if (parametre[0]=='-') //-3h ==>moins que trois heures
+    else if (isdigit(parametre[0])) //-3h ==>moins que trois heures
     {
         time_t temps=sb.st_atime;
         if ( (int) difftime(now,temps)<diff_time_obj)
@@ -443,5 +450,36 @@ int give_id(char* option){
         return -1;
     }
     
-    return -2; //forcément un paramètre ou d'autres options inconnus
+    return -2; //forcément un paramètre ou input erreur
 }
+
+bool check_param(int indiceOption, char* param){
+    switch (indiceOption)
+    {
+    case 2 :
+        if (param[0]=='+'||param[0]=='-')
+        {
+            if (sizeToNumber(param)==-1)
+            {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    case 3 :
+        if (param[0]=='+'||isdigit(param[0]))
+        {
+            if (timeToNumber(param)==-1)
+            {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    
+    default:
+        break;
+    }
+    return true;
+}
+

@@ -54,6 +54,7 @@ void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste);
 
 int give_id(char* option);//donner la valeur d'un flag, si c'est pas une option, alors -1
 
+bool check_param(int indiceOption, char* param);
 
 
 
