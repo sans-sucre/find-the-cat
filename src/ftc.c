@@ -6,15 +6,14 @@
 
 int main(int argc, char const *argv[]){
     char* starting_point=argv[2];
-
+    
     if (strcmp(argv[1],"ftc")!=0)
     {
         printf("La ligne de commande doit être écrit sous forme :\n \t\tftc starting-point [-option [paramètre]]\n ");
         return(EXIT_FAILURE);
-    
+    }
     option_liste* options_demandees = createOptionListe();
-    char* starting_point = argv[1];
-    int i = 2; //commence à 2 car 0 = ./ftc et 1 = starting_point
+    int i = 3; //commence à 2 car 0 = ./ftc et 1 = starting_point
     //char* options[12]={"-test","-name","-size","-date","-mime","-ctc","-dir","-color","-perm","-link","-threads","-ou"};
 
     while (argv[i]!=NULL) // pour détecter la fin de la ligne de commande
@@ -28,7 +27,7 @@ int main(int argc, char const *argv[]){
             //printf("give_id(argv[i+1] = %d\n",give_id(argv[i+1]));
 
             if (argv[i+1] != NULL){
-                if (give_id(argv[i+1])==-2 | (give_id(argv[i+1]) == -1) & (isdigit(argv[i+1][1])) ){ //si le suivant est un paramètre
+                if ( (give_id(argv[i+1]) == -1) & (isdigit(argv[i+1][1])) ){ //si le suivant est un paramètre
                     ajouteOption(options_demandees,argv[i],indice,argv[i+1]);
                     i++; //on saute le paramètre
                 }

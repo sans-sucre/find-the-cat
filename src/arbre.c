@@ -138,7 +138,6 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
 
             getChemin(chemin,nom,cheminP); //chemin de ce que j'analyse (je ne suis pas encore "dessus", je l'analyse depuis "chemin" = dossier)
             //printf("\nFichier/dossier analysé : %s\n",cheminP);
-
             bool status = true;
             int j = 0;
             cellule* current_option = options_demandees->premier;
@@ -150,7 +149,7 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
                     cellule* suivant = current_option->next;
                     printf("La valeur du flag %s est %s\n.",suivant->nom_option,suivant->param);
                     closedir(entree);
-                    return liste;
+                    return liste;//?
                 }
 
                 if (current_option->option != 6){ //si ce n'est pas -dir, une option sur les dossiers
@@ -444,5 +443,5 @@ int give_id(char* option){
         return -1;
     }
     
-    return -2; //forcément un paramètre
+    return -2; //forcément un paramètre ou d'autres options inconnus
 }
