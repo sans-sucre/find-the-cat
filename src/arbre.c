@@ -126,7 +126,7 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
     //initialisation, on ouvre le dossier en fonction du chemin donné
     DIR* entree =NULL;
     if ((entree = opendir (chemin)) == NULL) {
-        perror ("Cannot open .");
+        //perror ("Cannot open .");
         exit (1);
     }
     struct dirent* courant = NULL;//structure après readdir
