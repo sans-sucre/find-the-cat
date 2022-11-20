@@ -2,6 +2,7 @@
 #include <string.h>
 #include "arbre.h"
 #include "liste.h"
+#include "check.h"
 
 
 int main(int argc, char const *argv[]){
@@ -36,26 +37,19 @@ int main(int argc, char const *argv[]){
                 {
                     ajouteOption(options_demandees,argv[i],indice,argv[i+1]);
                     i++;
-                    //show_option_list(options_demandees);
                 }
                 }
             else{ //on ajoute l'option sans paramètre
                 ajouteOption(options_demandees,argv[i],indice,NULL);
             }
         }
-        
-        //printf("indice %d\n",indice);
-        //printf("argv i+1 %s\n",argv[i+1]);
-        //printf("give_id(argv[i+1] = %d\n",give_id(argv[i+1])<0);
-        
-        //printf("ok");
-
         i++;
     }
     
     if (options_demandees->premier == NULL){
         printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n \t\t./ftc starting-point -option paramètre\n ");
     }
+    test_option(options_demandees);
     
     //show_option_list(options_demandees);
     Liste* liste_finale = parcourir_choisir(starting_point,options_demandees,initialisationListe());

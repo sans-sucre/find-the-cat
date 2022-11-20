@@ -1,6 +1,7 @@
 #ifndef __ARBRE__
 #define __ARBRE__   
 #include "liste.h"
+#include "check.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
@@ -32,30 +33,8 @@ void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin se
 
 bool commande_a_exec(int indice_commande, char* parametre, struct dirent* fichier);
 
-bool name(char* parametre, struct dirent* fichier);
-
-void size(char* parametre,char* chemin);
-
-bool stateSize(char* parametre, char* chemin);
-
-void date(char* parametre,char* chemin);
-
-bool stateDate(char* parametre,char* chemin);
-
-bool mime(char* parametre, struct dirent* fichier);
-
-bool ctc(char* parametre, struct dirent* fichier);
-
-bool dir(char* parametre, struct dirent* dossier);
-
-bool check_regex(char* parametre, char* nom);
-
 void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste);
 
 int give_id(char* option);//donner la valeur d'un flag, si c'est pas une option, alors -1
-
-bool check_param(int indiceOption, char* param);
-
-
 
 #endif //__ARBRE__
