@@ -83,9 +83,17 @@ void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette f
     
     char cheminC[tailleC];
     strcpy(cheminC,objCourant);
-   
-
-    char* cheminAncienSlash=strcat(cheminA,"/");
+    char* cheminAncienSlash;
+    if (cheminAncien[strlen(cheminAncien)-1]== '/')
+    {
+        //printf("ok\n");
+        //exit(EXIT_SUCCESS);
+        cheminAncienSlash=strcat(cheminA,"");
+    }
+    else{
+        cheminAncienSlash=strcat(cheminA,"/");
+    }
+    
     
     int tailleA2=strlen(cheminAncienSlash);
     char cheminCat[tailleA2+tailleC];
