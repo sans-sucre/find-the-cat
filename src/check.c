@@ -52,26 +52,26 @@ bool stateSize(char* parametre, char* chemin){
         //perror("stat ERREUR");
         exit(EXIT_FAILURE);
     } 
-
-    if(parametre[0]=='+'){
+    switch (parametre[0])
+    {
+    case '+' :
         if ((long long)sb.st_size > sizeToNumber(parametre))
         {
             //printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
             return true;
-        }    
-    }
-    else if(parametre[0]=='-')
-    {
+        }  
+        break;  
+    case '-' : 
         if ((long long)sb.st_size < sizeToNumber(parametre))
         {
             //printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
             return true;
-        }    
-    }
-    else
-    {
-        //perror("paramètre erreur, caractère dehors '+''-'\n");
+        } 
+        break; 
+    default:
+         //perror("paramètre erreur, caractère dehors '+''-'\n");
         exit(EXIT_FAILURE);
+        break;
     }
     return false;
 }

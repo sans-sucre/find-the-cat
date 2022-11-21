@@ -45,11 +45,12 @@ int main(int argc, char const *argv[]){
         }
         i++;
     }
+    Liste* liste_finale=initialisationListe();
     
-    //if (options_demandees->premier == NULL){
+    if (options_demandees->premier == NULL){
         //printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n \t\t./ftc starting-point -option paramètre\n ");
-   //     parcourirDossier(starting_point);
-    //}
+        ajouter(liste_finale,starting_point);
+    }
     
     if (test_option(options_demandees))//s'il y a option -test 
     {
@@ -58,9 +59,11 @@ int main(int argc, char const *argv[]){
     }
     
     //test_option(options_demandees);
-    Liste* liste_finale=initialisationListe();
+    
     //show_option_list(options_demandees);
-    ajouter(liste_finale,starting_point);//initialisation,sinon manque le dossier courant
+    
+    
+    //initialisation,sinon manque le dossier courant
     parcourir_choisir(starting_point,options_demandees,liste_finale);
     afficher_chemins_liste(liste_finale);
     

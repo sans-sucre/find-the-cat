@@ -141,10 +141,6 @@ void parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* lis
             bool status = true;
             int j = 0;
             cellule* current_option = options_demandees->premier;
-            if (current_option==NULL)
-            {
-                status=true;
-            }
             
             while (current_option != NULL){ //pour chaque option demandée
                 //printf("Option demandée %d : %s\n",j,current_option->nom_option);
@@ -152,7 +148,6 @@ void parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* lis
                 if (current_option->option != 6){ //si ce n'est pas -dir, une option sur les dossiers
                     if (estFichier(courant)){ //si c'est un fichier   
                         if (!commande_a_exec(current_option->option,current_option->param,courant,cheminP)){  //on exécute l'option avec son paramètre et on voit si le fichier correspond
-                            //printf("Condition non respectée\n");
                             status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
                             break;  //pas besoin de regarder les autres options demandées
                         }
