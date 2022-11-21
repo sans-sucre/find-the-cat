@@ -22,8 +22,6 @@ int sizeToNumber(char* parametre);//transformer un paramètre en un nombre
 
 int timeToNumber(char* parametre);//transformer un paramètre de temps en un nombre
 
-void parcourirDossier(char* chemin);
-
 void parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste);
 
 void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin sera enregistré dans le paramettre enregistre

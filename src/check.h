@@ -8,6 +8,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <grp.h>
+#include <pwd.h>
 #include <time.h>
 #include <unistd.h>
 #include <regex.h>
@@ -24,13 +26,11 @@ bool test_option(option_liste* options_demandees);// pour option -test
 
 bool name(char* parametre, struct dirent* fichier);
 
-void size(char* parametre,char* chemin);
-
 bool stateSize(char* parametre, char* chemin);
 
-void date(char* parametre,char* chemin);
-
 bool stateDate(char* parametre,char* chemin);
+
+bool statePerm(char* parametre, char* chemin);
 
 bool mime(char* parametre, struct dirent* fichier);
 
@@ -38,7 +38,9 @@ bool ctc(char* parametre, struct dirent* fichier);
 
 bool dir(char* parametre, struct dirent* dossier);
 
+bool color(char* parametre,char* cheminP);
 
+int octToDec(int octal);
 
 
 

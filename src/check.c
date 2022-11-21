@@ -20,31 +20,6 @@ bool name(char* parametre, struct dirent* fichier){
     return false;
 }
 
-void size(char* parametre,char* chemin){
-
-    DIR* entree = opendir(chemin);
-    struct dirent* courant = NULL;
-    char cheminP[200];
-    
-    while ((courant = readdir(entree))!= NULL)
-    {    
-        char* nom = courant->d_name; 
-        getChemin(chemin,nom,cheminP);
-
-        if (estFichier(courant)) // est un fichier
-        {
-            if(stateSize(parametre,cheminP)){
-                //printf("chemin : %s \n",cheminP);
-            }
-        }
-        if (etatContinue(courant)){ 
-            
-            size(parametre,cheminP);
-        }    
-    }
-    closedir(entree);
-    
-}
 
 bool stateSize(char* parametre, char* chemin){
     struct stat sb;
@@ -138,35 +113,33 @@ bool stateDate(char* parametre,char* chemin){
     return false;
 }
 
-
-void date(char* parametre,char* chemin){
-    
-    DIR* entree = opendir(chemin);
-    struct dirent* courant = NULL;
-    char cheminP[200];
-    
-    while ((courant = readdir(entree))!= NULL)
-    {    
-        char* nom = courant->d_name; 
-        getChemin(chemin,nom,cheminP);
-        //printf("chemin : %s \n",cheminP);
-
-        if (estFichier(courant)) // est un fichier
-        {
-
-            if(stateDate(parametre,cheminP)){
-                
-            }
-            
-        }
-        if (etatContinue(courant)){ 
-            
-            date(parametre,cheminP);
-        }    
-    }
-    closedir(entree);
-    
+int octToDec(int octal){
+    char str[5];
+    sprintf(str,"%d",octal);
+    int decimale=atoi(str[0])*8*8+atoi(str[1])*8+atoi(str[2]);
+    return decimale;
 }
+
+
+bool statePerm(char* parametre, char* chemin){
+    struct stat sb;
+    if (stat(chemin,&sb)==-1){
+        //perror("stat ERREUR");
+        exit(EXIT_FAILURE);
+    } 
+    int perm=sb.st_mode&0777;
+    int paramDec=(parametre[0]-48)*8*8+(parametre[1]-48)*8+(parametre[2]-48);
+    //printf("paramD :%d\n",paramDec);
+    //printf("param %c",parametre[0]);
+    if (paramDec==perm)
+    {
+        return true;
+    }
+    
+    return false;
+}
+
+
 bool mime(char* parametre, struct dirent* fichier){
     printf("Fonction mime\n");
     return;
@@ -189,6 +162,9 @@ bool dir(char* parametre, struct dirent* dossier){
     return false;
 }
 
+bool color(char* parametre,char* cheminP){
+    return false;
+};
 
 bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui passer un const char
     regex_t preg;

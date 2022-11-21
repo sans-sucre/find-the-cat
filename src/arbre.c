@@ -103,31 +103,6 @@ void getChemin(char* cheminAncien, char* objCourant,char* enregistre){// cette f
 
 }
 
-void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
-    //initialisation, on ouvre le dossier en fonction du chemin donné
-    DIR* entree = opendir(chemin);
-    struct dirent* courant = NULL;//structure après readdir
-
-    char cheminP[200];//seule façon à enregistrer le prochain chemin
-    //printf("chemin courant : %s\n",chemin);
-    
-    while ((courant = readdir(entree))!= NULL)
-    {    
-        char* nom = courant->d_name; //nom du fichier ou dossier
-
-        //printf("name is : %s, coutinue ? : %d\n",courant->d_name,etatContinue(courant));
-        if( (strcmp(nom,".")!=0) & (strcmp(nom,"..")!=0) & (nom[0]!='.') ){//on prend pas en compte le dossier courant, le dossier précédent ou les fichiers cachés
-
-            getChemin(chemin,nom,cheminP);
-            printf("%s\n",cheminP); //on print le chemin du dossier ou fichier
-
-            if (etatContinue(courant)){ //si c'est un dossier
-                parcourirDossier(cheminP);
-            }    
-        } 
-    }
-    closedir(entree);
-}
 
 
 void parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste){
@@ -223,7 +198,10 @@ bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier,
 
     case 6:
         return dir(parametre,fichier);
-
+    case 7 :
+        return color(parametre,cheminP);
+    case 8 :
+        return statePerm(parametre,cheminP);
     default:
         printf("Erreur : option non reconnue.\n");
         return false;
