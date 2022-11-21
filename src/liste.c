@@ -73,6 +73,7 @@ void supprimerListe(Liste* liste){
         while (liste->premier->next != NULL){ //tant que le suivant n'est pas nul
             Element* aSupprimer = liste->premier;
             liste->premier = aSupprimer->next;
+            aSupprimer->next=NULL;
             free(aSupprimer->chemin_fichier);
             free(aSupprimer);
         }

@@ -24,7 +24,7 @@ int timeToNumber(char* parametre);//transformer un paramètre de temps en un nom
 
 void parcourirDossier(char* chemin);
 
-Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste);
+void parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste);
 
 void getChemin(char* cheminAvant, char* objCourant,char* enregistre);//chemin sera enregistré dans le paramettre enregistre
 

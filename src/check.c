@@ -242,6 +242,12 @@ bool check_param(int indiceOption, char* param){
 bool test_option(option_liste* options_demandees){
     cellule* current_option = options_demandees->premier;
 
+    if (current_option==NULL)
+    {
+        return false;
+    }
+    
+
     if (current_option->option == 0){ //si c'est le test
         cellule* suivant = current_option->next;
         //   printf("option  %s, param :%s\n",suivant->nom_option,suivant->param);

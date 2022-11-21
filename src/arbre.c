@@ -122,7 +122,7 @@ void parcourirDossier(char* chemin){ //faudrait donner les fichiers aussi
 }
 
 
-Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste){
+void parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* liste){
     //initialisation, on ouvre le dossier en fonction du chemin donné
     DIR* entree =NULL;
     if ((entree = opendir (chemin)) == NULL) {
@@ -141,6 +141,10 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
             bool status = true;
             int j = 0;
             cellule* current_option = options_demandees->premier;
+            if (current_option==NULL)
+            {
+                status=true;
+            }
             
             while (current_option != NULL){ //pour chaque option demandée
                 //printf("Option demandée %d : %s\n",j,current_option->nom_option);
@@ -183,13 +187,13 @@ Liste* parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* l
             }
             
             if (etatContinue(courant)){ //si dossier
-                liste = parcourir_choisir(cheminP,options_demandees,liste);  //j'analyse les fichiers/dossiers de ce dossier
+                parcourir_choisir(cheminP,options_demandees,liste);  //j'analyse les fichiers/dossiers de ce dossier
             }    
         }
     }
     //fin du parcours de l'arborescence
     closedir(entree);
-    return liste;
+    
 }
 
 //fonctions qui correspondent aux commandes (bien si c'est du même nom)

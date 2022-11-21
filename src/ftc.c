@@ -46,9 +46,11 @@ int main(int argc, char const *argv[]){
         i++;
     }
     
-    if (options_demandees->premier == NULL){
-        printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n \t\t./ftc starting-point -option paramètre\n ");
-    }
+    //if (options_demandees->premier == NULL){
+        //printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n \t\t./ftc starting-point -option paramètre\n ");
+   //     parcourirDossier(starting_point);
+    //}
+    
     if (test_option(options_demandees))//s'il y a option -test 
     {
         supprime(options_demandees);
@@ -56,12 +58,13 @@ int main(int argc, char const *argv[]){
     }
     
     //test_option(options_demandees);
-    Liste* Liste_finale=initialisationListe();
+    Liste* liste_finale=initialisationListe();
     //show_option_list(options_demandees);
-    Liste* liste_finale = parcourir_choisir(starting_point,options_demandees,initialisationListe());
+    ajouter(liste_finale,starting_point);//initialisation,sinon manque le dossier courant
+    parcourir_choisir(starting_point,options_demandees,liste_finale);
     afficher_chemins_liste(liste_finale);
     
-    //supprimerListe(liste_finale);
+    supprimerListe(liste_finale);
     supprime(options_demandees);
     //check_regex("a*","arbr.h");
 
