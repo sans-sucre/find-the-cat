@@ -48,6 +48,8 @@ void size(char* parametre,char* chemin){
 
 bool stateSize(char* parametre, char* chemin){
     struct stat sb;
+    int taille=sizeToNumber(parametre);
+    char premierC=parametre[0];
     if (stat(chemin,&sb)==-1){
         //perror("stat ERREUR");
         exit(EXIT_FAILURE);
@@ -55,22 +57,36 @@ bool stateSize(char* parametre, char* chemin){
     switch (parametre[0])
     {
     case '+' :
-        if ((long long)sb.st_size > sizeToNumber(parametre))
+        if ((long long)sb.st_size > taille)
         {
             //printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
             return true;
         }  
         break;  
     case '-' : 
-        if ((long long)sb.st_size < sizeToNumber(parametre))
+        if ((long long)sb.st_size < taille)
         {
             //printf("chemin : %s taille de fichier : %lu octets\n",chemin,sb.st_size);
             return true;
         } 
-        break; 
+        break;  
     default:
-         //perror("paramètre erreur, caractère dehors '+''-'\n");
-        exit(EXIT_FAILURE);
+        //perror("paramètre erreur, caractère dehors '+''-'\n");
+        if (isdigit(premierC))
+        {
+            if ((long long)sb.st_size == taille)
+            {
+                //printf("ok2\n");
+                return true;
+            }
+        }
+        else{
+            //perror("paramètre erreur, caractère dehors '+''-' ' '\n");
+            return false;
+        }
+        
+        
+        
         break;
     }
     return false;

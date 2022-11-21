@@ -57,7 +57,7 @@ int main(int argc, char const *argv[]){
         supprime(options_demandees);
         return 0;
     }
-    
+    //size("27c",starting_point);
     //test_option(options_demandees);
     
     //show_option_list(options_demandees);
