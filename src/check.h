@@ -13,6 +13,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <regex.h>
+#include <magic.h>
 #include <ctype.h> //pour isdigit()
 
 
@@ -32,7 +33,7 @@ bool stateDate(char* parametre,char* chemin);
 
 bool statePerm(char* parametre, char* chemin);
 
-bool mime(char* parametre, struct dirent* fichier);
+bool mime(char* parametre, char* chemin);
 
 bool ctc(char* parametre, struct dirent* fichier);
 

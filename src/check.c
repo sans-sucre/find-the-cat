@@ -140,9 +140,28 @@ bool statePerm(char* parametre, char* chemin){
 }
 
 
-bool mime(char* parametre, struct dirent* fichier){
-    printf("Fonction mime\n");
-    return;
+bool mime(char* parametre, char* chemin){
+    struct magit_t* mg;
+    mg=magic_open(MAGIC_CONTINUE|MAGIC_MIME_TYPE|MAGIC_NONE);
+    magic_load(mg,NULL);
+    magic_compile(mg, NULL);
+    if (parametre==NULL)
+    {
+        perror("parametre incomplet");
+        exit(EXIT_FAILURE);
+    }
+    
+    char* type=magic_file(mg,chemin);
+    printf("type : %s fichier : %s\n",type,chemin);
+    if (strcmp(parametre,type)==0)
+    {   
+        //printf("file :%s  type :%s  \n",chemin,magic_file(mg,name));
+        magic_close(mg);
+        return true;
+    }
+    //printf("file : %s \n",magic_file(mg,name));
+    magic_close(mg);
+    return false;
 }
 bool ctc(char* parametre, struct dirent* fichier){
     printf("Fonction ctc\n");
