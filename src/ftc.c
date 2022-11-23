@@ -25,8 +25,8 @@ int main(int argc, char const *argv[]){
         if (indice==0) //si -test
         {
             ajouteOption(options_demandees,argv[i],indice,NULL);
-            
         }
+
         else
         {
             if (argv[i+1] != NULL){
@@ -50,7 +50,6 @@ int main(int argc, char const *argv[]){
     Liste* liste_finale=initialisationListe();
     
     if (options_demandees->premier == NULL){
-        //printf("Aucune option donnée. La ligne de commande doit être écrite sous la forme :\n \t\t./ftc starting-point -option paramètre\n ");
         ajouter(liste_finale,starting_point);
     }
     

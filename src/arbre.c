@@ -129,7 +129,7 @@ void parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* lis
                 //printf("Option demandée %d : %s\n",j,current_option->nom_option);
 
                 if (current_option->option != 6){ //si ce n'est pas -dir, une option sur les dossiers
-                    if (estFichier(courant)){ //si c'est un fichier   
+                    if (estFichier(courant)){ //si c'est un fichier
                         if (!commande_a_exec(current_option->option,current_option->param,courant,cheminP)){  //on exécute l'option avec son paramètre et on voit si le fichier correspond
                             status = false; //il ne correspond pas à au moins une condition imposée par le paramètre d'une fonction
                             break;  //pas besoin de regarder les autres options demandées
@@ -192,7 +192,8 @@ bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier,
         return mime(parametre,cheminP);
 
     case 5:
-        return ctc(parametre,fichier);
+        printf("chemin : %s\n",cheminP);
+        return ctc(parametre,cheminP);
 
     case 6:
         return dir(parametre,fichier);

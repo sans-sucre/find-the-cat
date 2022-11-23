@@ -1,4 +1,5 @@
 #include "check.h"
+
 bool name(char* parametre, struct dirent* fichier){
     int tailleP=strlen(parametre)+4;
     char param[tailleP];
@@ -160,11 +161,6 @@ bool mime(char* parametre, char* chemin){
     return false;
 }
 
-bool ctc(char* parametre, struct dirent* fichier){
-    printf("Fonction ctc\n");
-    return;
-}
-
 bool dir(char* parametre, struct dirent* dossier){
 
     char* nom = dossier->d_name; //nom du dossier
@@ -210,6 +206,38 @@ bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui pas
     }
     
 }
+
+bool ctc(char* parametre, char* chemin){
+    
+    int taille_chemin = strlen(chemin)+4;
+    char chemin_const[taille_chemin];
+    strcpy(chemin_const,chemin);
+
+    FILE* f = fopen(chemin_const,'r');
+
+    if (f == NULL){ //erreur d'ouverture du fichier
+            exit(EXIT_FAILURE);
+        }
+
+    int taille = strlen(parametre)+4;
+    char param[taille];
+    strcpy(param,parametre);
+    char* line[100];
+
+    while (fgets(line,100,f) != NULL){
+        
+        char ligne[strlen(line)+4];
+        strcpy(ligne,line);
+
+        if (check_regex(ligne,param)){
+            fclose(f);
+            return true;
+        }
+    }
+    fclose(f);
+    return false;
+}
+
 
 void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste){
     Liste* liste_finale = parcourir_choisir(chemin,options_demandees,liste);

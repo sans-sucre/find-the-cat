@@ -35,7 +35,7 @@ bool statePerm(char* parametre, char* chemin);
 
 bool mime(char* parametre, char* chemin);
 
-bool ctc(char* parametre, struct dirent* fichier);
+bool ctc(char* parametre, char* chemin);
 
 bool dir(char* parametre, struct dirent* dossier);
 
