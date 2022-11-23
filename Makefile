@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -std=gnu99 #-fsanitize=address
+CFLAGS=-Wall -Wextra -std=gnu99 -fsanitize=address -lmagic
 SRC=./src/
 BIN=./bin/
 
