@@ -2,6 +2,7 @@
 #include <string.h>
 #include "arbre.h"
 #include "liste.h"
+#include "MegaMimes.h"
 #include "check.h"
 
 

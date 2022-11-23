@@ -2,6 +2,7 @@
 #define __ARBRE__   
 #include "liste.h"
 #include "check.h"
+#include "MegaMimes.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
@@ -10,6 +11,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
+#include <limits.h>
 #include <regex.h>
 #include <ctype.h> //pour isdigit()
 
@@ -31,5 +33,7 @@ bool commande_a_exec(int indice_commande, char* parametre, struct dirent* fichie
 void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste);
 
 int give_id(char* option);//donner la valeur d'un flag, si c'est pas une option, alors -1
+
+void getlink(char* chemin);
 
 #endif //__ARBRE__

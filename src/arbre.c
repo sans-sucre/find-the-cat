@@ -175,8 +175,6 @@ void parcourir_choisir(char* chemin, option_liste* options_demandees, Liste* lis
 }
 
 //fonctions qui correspondent aux commandes (bien si c'est du même nom)
-
-
 bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier,char* cheminP){
     //printf("chemin %s0\n",cheminP);
     switch (indice_commande)
@@ -191,7 +189,7 @@ bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier,
         return stateDate(parametre,cheminP);
 
     case 4:
-        return mime(parametre,fichier);
+        return mime(parametre,cheminP);
 
     case 5:
         return ctc(parametre,fichier);
@@ -226,4 +224,15 @@ int give_id(char* option){
     return -2; //forcément un paramètre ou input erreur
 }
 
+void getlink(char* chemin){
+    struct stat sb;
+    char* buf;//readlink à lire le lien symbolique, pas fini, repos
+    if (lstat(chemin,&sb)==-1)
+    {
+        perror("lstat");
+        return(EXIT_FAILURE);
+    }
+
+    
+}
 
