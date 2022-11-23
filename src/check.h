@@ -13,7 +13,6 @@
 #include <time.h>
 #include <unistd.h>
 #include <regex.h>
-#include <magic.h>
 #include <ctype.h> //pour isdigit()
 
 

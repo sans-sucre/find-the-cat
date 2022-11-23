@@ -141,6 +141,7 @@ bool statePerm(char* parametre, char* chemin){
 
 
 bool mime(char* parametre, char* chemin){
+    /*
     struct magit_t* mg;
     mg=magic_open(MAGIC_NO_CHECK_ENCODING);
     magic_load(mg,NULL);
@@ -160,7 +161,7 @@ bool mime(char* parametre, char* chemin){
         return true;
     }
     //printf("file : %s \n",magic_file(mg,name));
-    magic_close(mg);
+    magic_close(mg);*/
     return false;
 }
 bool ctc(char* parametre, struct dirent* fichier){
