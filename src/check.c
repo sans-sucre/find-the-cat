@@ -142,7 +142,7 @@ bool statePerm(char* parametre, char* chemin){
 
 bool mime(char* parametre, char* chemin){
     struct magit_t* mg;
-    mg=magic_open(MAGIC_CONTINUE|MAGIC_MIME_TYPE|MAGIC_NONE);
+    mg=magic_open(MAGIC_NO_CHECK_ENCODING);
     magic_load(mg,NULL);
     magic_compile(mg, NULL);
     if (parametre==NULL)
