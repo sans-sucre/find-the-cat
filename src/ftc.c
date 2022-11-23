@@ -16,13 +16,12 @@ int main(int argc, char const *argv[]){
     }
     option_liste* options_demandees = createOptionListe();
     int i = 2; //commence à 2 car 0 = ./ftc et 1 = starting_point
-    //char* options[12]={"-test","-name","-size","-date","-mime","-ctc","-dir","-color","-perm","-link","-threads","-ou"};
 
     while (argv[i]!=NULL) // pour détecter la fin de la ligne de commande
     {   
         int indice = give_id(argv[i]);
 
-        if (indice==0)
+        if (indice==0) //si -test
         {
             ajouteOption(options_demandees,argv[i],indice,NULL);
             
@@ -30,7 +29,7 @@ int main(int argc, char const *argv[]){
         else
         {
             if (argv[i+1] != NULL){
-                if (give_id(argv[i+1])>=0)//si le preochaine élément est une option
+                if (give_id(argv[i+1])>=0)//si le prochain élément est une option
                 {
                     ajouteOption(options_demandees,argv[i],indice,NULL);
                 }
@@ -39,13 +38,14 @@ int main(int argc, char const *argv[]){
                     ajouteOption(options_demandees,argv[i],indice,argv[i+1]);
                     i++;
                 }
-                }
+            }
             else{ //on ajoute l'option sans paramètre
                 ajouteOption(options_demandees,argv[i],indice,NULL);
             }
         }
         i++;
     }
+
     Liste* liste_finale=initialisationListe();
     
     if (options_demandees->premier == NULL){
