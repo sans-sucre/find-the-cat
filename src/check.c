@@ -120,7 +120,6 @@ int octToDec(int octal){
     return decimale;
 }
 
-
 bool statePerm(char* parametre, char* chemin){
     struct stat sb;
     if (stat(chemin,&sb)==-1){
@@ -139,35 +138,33 @@ bool statePerm(char* parametre, char* chemin){
     return false;
 }
 
-
 bool mime(char* parametre, char* chemin){
-    /*
-    struct magit_t* mg;
-    mg=magic_open(MAGIC_NO_CHECK_ENCODING);
-    magic_load(mg,NULL);
-    magic_compile(mg, NULL);
+    char* mimetype=getMegaMimeType(chemin);
     if (parametre==NULL)
     {
         perror("parametre incomplet");
         exit(EXIT_FAILURE);
     }
+    //printf("mimetype : %s file : %s\n",mimetype, chemin);
+    if (mimetype==NULL)
+    {
+        return false;
+    }
     
-    char* type=magic_file(mg,chemin);
-    printf("type : %s fichier : %s\n",type,chemin);
-    if (strcmp(parametre,type)==0)
-    {   
-        //printf("file :%s  type :%s  \n",chemin,magic_file(mg,name));
-        magic_close(mg);
+    if (strstr(mimetype,parametre))
+    {
+        //freeMegaString(mimetype);
         return true;
     }
-    //printf("file : %s \n",magic_file(mg,name));
-    magic_close(mg);*/
+    //freeMegaString(mimetype);
     return false;
 }
+
 bool ctc(char* parametre, struct dirent* fichier){
     printf("Fonction ctc\n");
     return;
 }
+
 bool dir(char* parametre, struct dirent* dossier){
 
     char* nom = dossier->d_name; //nom du dossier
@@ -258,8 +255,6 @@ bool test_option(option_liste* options_demandees){
     {
         return false;
     }
-    
-
     if (current_option->option == 0){ //si c'est le test
         cellule* suivant = current_option->next;
         //   printf("option  %s, param :%s\n",suivant->nom_option,suivant->param);

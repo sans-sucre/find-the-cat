@@ -2,6 +2,7 @@
 #define __ARBRE__   
 #include "liste.h"
 #include "check.h"
+#include "MegaMimes.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>

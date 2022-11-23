@@ -2,6 +2,7 @@
 #define __CHECK__
 
 #include "liste.h"
+#include "MegaMimes.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
@@ -41,7 +42,6 @@ bool dir(char* parametre, struct dirent* dossier);
 bool color(char* parametre,char* cheminP);
 
 int octToDec(int octal);
-
 
 
 
