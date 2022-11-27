@@ -208,28 +208,27 @@ bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui pas
 }
 
 bool ctc(char* parametre, char* chemin){
+
+    FILE* f = fopen(chemin,"r");
     
-    int taille_chemin = strlen(chemin)+4;
-    char chemin_const[taille_chemin];
-    strcpy(chemin_const,chemin);
-
-    FILE* f = fopen(chemin_const,'r');
-
     if (f == NULL){ //erreur d'ouverture du fichier
+            fprintf(stderr, "fopen()");
             exit(EXIT_FAILURE);
         }
 
     int taille = strlen(parametre)+4;
     char param[taille];
     strcpy(param,parametre);
-    char* line[100];
+    char* line[1000];
 
-    while (fgets(line,100,f) != NULL){
+    while (fgets(line,1000,f) != NULL){
         
         char ligne[strlen(line)+4];
         strcpy(ligne,line);
+        //ligne[strcspn(ligne, "\n")] = 0;
+        //printf("Ligne :%sfin\n%sfin",ligne,param);
 
-        if (check_regex(ligne,param)){
+        if (check_regex(param,ligne)){
             fclose(f);
             return true;
         }

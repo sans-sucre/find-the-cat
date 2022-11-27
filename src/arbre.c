@@ -192,15 +192,17 @@ bool commande_a_exec(int indice_commande,char* parametre,struct dirent* fichier,
         return mime(parametre,cheminP);
 
     case 5:
-        printf("chemin : %s\n",cheminP);
         return ctc(parametre,cheminP);
 
     case 6:
         return dir(parametre,fichier);
+    
     case 7 :
         return color(parametre,cheminP);
+    
     case 8 :
         return statePerm(parametre,cheminP);
+    
     default:
         printf("Erreur : option non reconnue.\n");
         return false;
