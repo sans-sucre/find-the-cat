@@ -222,11 +222,9 @@ bool ctc(char* parametre, char* chemin){
     char* line[1000];
 
     while (fgets(line,1000,f) != NULL){
-        
+
         char ligne[strlen(line)+4];
         strcpy(ligne,line);
-        //ligne[strcspn(ligne, "\n")] = 0;
-        //printf("Ligne :%sfin\n%sfin",ligne,param);
 
         if (check_regex(param,ligne)){
             fclose(f);
