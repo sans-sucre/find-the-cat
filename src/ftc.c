@@ -83,6 +83,7 @@ int main(int argc, char const *argv[]){
     if (test_option(options_demandees))//s'il y a option -test 
     {
         supprime(options_demandees);
+        supprimerListe(liste_finale);
         return 0;
     }
     //size("27c",starting_point);

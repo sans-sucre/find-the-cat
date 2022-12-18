@@ -19,8 +19,6 @@
 
 bool check_regex(char* parametre, char* nom);
 
-void bonne_sortie(char* chemin, option_liste* options_demandees, Liste* liste);
-
 bool check_param(int indiceOption, char* param);
 
 bool test_option(option_liste* options_demandees);// pour option -test 
