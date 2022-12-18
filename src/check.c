@@ -208,14 +208,14 @@ bool check_regex(char* parametre, char* nom){// les paramètres ici doit lui pas
 }
 
 bool ctc(char* parametre, char* chemin){
-
+    
     FILE* f = fopen(chemin,"r");
     
     if (f == NULL){ //erreur d'ouverture du fichier
-            fprintf(stderr, "fopen()");
-            exit(EXIT_FAILURE);
+            //fprintf(stderr, "fopen()");
+            return false;
         }
-
+    
     int taille = strlen(parametre)+4;
     char param[taille];
     strcpy(param,parametre);
@@ -225,7 +225,7 @@ bool ctc(char* parametre, char* chemin){
 
         char ligne[strlen(line)+4];
         strcpy(ligne,line);
-
+        
         if (check_regex(param,ligne)){
             fclose(f);
             return true;
