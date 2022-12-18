@@ -104,8 +104,12 @@ void ajouteOption(option_liste* liste,char* nom_option,int option,char* param){
     }
 
     nouveau->option = option;
-    nouveau->nom_option = nom_option;
-    nouveau->param=param;
+    
+    nouveau->nom_option = malloc(sizeof(char) * (strlen(nom_option)+1) );
+    strcpy(nouveau->nom_option,nom_option);
+
+    nouveau->param = malloc(sizeof(char) * (strlen(param)+1) );
+    strcpy(nouveau->param,param); 
 
     nouveau->next=NULL;
 
@@ -145,12 +149,12 @@ void supprime(option_liste* liste){
         while (liste->premier->next != NULL){ //tant que le suivant n'est pas nul
             cellule* aSupprimer = liste->premier;
             liste->premier = aSupprimer->next;
-            //free(aSupprimer->param);
-            //free(aSupprimer->nom_option);
+            free(aSupprimer->param);
+            free(aSupprimer->nom_option);
             free(aSupprimer);
         }
-        //free(liste->premier->param);
-        //free(liste->premier->nom_option);
+        free(liste->premier->param);
+        free(liste->premier->nom_option);
         free(liste->premier);
     }
     free(liste);

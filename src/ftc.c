@@ -18,6 +18,7 @@ int main(int argc, char const *argv[]){
     option_liste* options_demandees = createOptionListe();
     int i = 2; //commence à 2 car 0 = ./ftc et 1 = starting_point
 
+
     while (argv[i]!=NULL) // pour détecter la fin de la ligne de commande
     {   
         int indice = give_id(argv[i]);
@@ -34,10 +35,36 @@ int main(int argc, char const *argv[]){
                 {
                     ajouteOption(options_demandees,argv[i],indice,NULL);
                 }
-                else// sinon, c'est pas une option
-                {
-                    ajouteOption(options_demandees,argv[i],indice,argv[i+1]);
-                    i++;
+                else{// sinon, c'est pas une option
+                    
+                    int j = i+1;
+                    char* param = malloc(sizeof(char) * strlen(argv[j]) +1); //on initialise le paramètre
+                    strcpy(param,"");
+                    
+                    while (j < argc && give_id(argv[j]) < 0){ //tant qu'on a des paramètres
+                       
+                        char* temp = malloc(sizeof(char) * (strlen(param)+1 + strlen(argv[j])+1 +2)); //+2 pour l'espace
+                        strcpy(temp,param); //on copie ce qu'il y avait avant
+                        
+                        free(param); //on free le paramètre pour lui allouer la bonne taille
+                        param = malloc(sizeof(char) * (strlen(temp)+1 + strlen(argv[j]) +1));
+
+                        if(strcmp(temp,"") != 0){ //s'il y avait un autre mot avant, on met un espace
+                            strcat(temp," ");
+                        }
+
+                        strcat(temp,argv[j]); //on ajoute le nv mot
+                        strcpy(param,temp); //on copie dans le paramètre
+                        j++;
+                        
+                        //printf("j : %d\nargc : %d\nparam : %s\n",j,argc,param);
+                        
+                        free(temp);
+                    }
+                    
+                    ajouteOption(options_demandees,argv[i],indice,param); //param contient au moins un mot
+                    free(param);
+                    i = j-1;
                 }
             }
             else{ //on ajoute l'option sans paramètre
